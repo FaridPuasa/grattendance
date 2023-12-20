@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Attendance Management</title>
+    <!-- Your HTML head content -->
+
+    <!-- Include your scripts and stylesheets -->
+    <script>
+        function recordAttendance() {
+            if ("geolocation" in navigator) {
+                navigator.geolocation.getCurrentPosition(async (position) => {
+                    const { latitude, longitude } = position.coords;
+
+                    try {
+                        const response = await fetch('/attendance', {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({ latitude, longitude })
+                        });
+
+                        if (response.ok) {
+                            console.log('Attendance recorded successfully');
+                        } else {
+                            console.error('Failed to record attendance');
+                        }
+                    } catch (error) {
+                        console.error('Error:', error);
+                    }
+                });
+            } else {
+                console.error('Geolocation is not supported by this browser');
+            }
+        }
+    </script>
+</head>
+<body>
+    <h1>Remote Attendance</h1>
+
+    <!-- Attendance Log Section -->
+    <section class="attendance-log">
+        <h2>Attendance Log:</h2>
+        <div id="attendanceLog">
+           <% if (data && data.length > 0) { %>
+            <% data.forEach(entry => { %>
+                <div class="log-entry">
+                    <p><strong>Username:</strong> <%= entry.username %></p>
+                    <p><strong>Action:</strong> <%= entry.action %></p>
+                    <p><strong>Sign In:</strong> <%= entry.timestamp %></p>
+                    <p><strong>Sign Out:</strong> <%= entry.timestamp %></p>
+                    <p><strong>Location:</strong> <%= entry.location %></p>
+                </div>
+            <% }); %>
+        <% } else { %>
+            <p>No attendance records found.</p>
+        <% } %>
+    </div>
+    </section>
+
+    <!-- Attendance Recording Section -->
+    <section class="attendance-recording">
+        <h2>Record Attendance</h2>
+        <!-- Example button to trigger attendance recording -->
+        <button onclick="recordAttendance()">Record Attendance</button>
+    </section>
+
+    <!-- Other HTML content or scripts -->
+</body>
+</html>

@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Sign Out</title>
+    
+    <!-- Include the Bing Maps script -->
+    <script src="https://www.bing.com/api/maps/mapcontrol?key=AgkWMZlk5ts6xb8cJkzUar2iJMWTexduafRzsyANqeAF2b_PN0D2CZAKo8hfNqkB" async defer></script>
+</head>
+<body>
+    <h1>Sign Out</h1>
+    
+    <!-- Add a div for the Bing Maps -->
+    <div id="map" style="width: 50%; height: 400px;"></div>
+
+    <!-- Form for sign-out -->
+    <form id="signOutForm" method="POST" action="/signout">
+        <label for="username">Username:</label>
+        <input type="text" name="username" required>
+        <label for="location">Location:</label>
+        <input type="text" id="locationInput" name="location" required>
+        <input type="hidden" name="action" value="Sign Out">
+        <label for="time">Sign Out Time:</label>
+        <input type="time" name="timestamp" required>
+        <label for="date">Date:</label>
+        <input type="date" name="date" required>
+        <button type="button" onclick="getLocation('signOut')">Get Location for Sign Out</button>
+        <button type="submit">Sign Out</button>
+    </form>
+
+    <!-- Your JavaScript for Bing Maps integration -->
+    <script>
+        let map;
+
+        function loadMapScenario() {
+            map = new Microsoft.Maps.Map(document.getElementById('map'), {
+                credentials: 'AgkWMZlk5ts6xb8cJkzUar2iJMWTexduafRzsyANqeAF2b_PN0D2CZAKo8hfNqkB'
+            });
+        }
+
+        function updateMapWithLocation(latitude, longitude) {
+            const userLocation = new Microsoft.Maps.Location(latitude, longitude);
+            map.setView({ center: userLocation, zoom: 10 });
+
+            // Example marker at the user's location
+            const pin = new Microsoft.Maps.Pushpin(userLocation);
+            map.entities.push(pin);
+
+            // Reverse geocode to get the address based on latitude and longitude
+            Microsoft.Maps.loadModule('Microsoft.Maps.Search', function () {
+                const searchManager = new Microsoft.Maps.Search.SearchManager(map);
+                const reverseGeocodeRequestOptions = {
+                    location: userLocation,
+                    callback: function (result) {
+                        if (result && result.results && result.results.length > 0) {
+                            const address = result.results[0].address.formattedAddress;
+                            document.getElementById('locationInput').value = address;
+                        }
+                    },
+                    errorCallback: function (e) {
+                        // Handle error
+                    }
+                };
+                searchManager.reverseGeocode(reverseGeocodeRequestOptions);
+            });
+        }
+
+        function getLocation(action) {
+            if ("geolocation" in navigator) {
+                navigator.geolocation.getCurrentPosition(function(position) {
+                    const latitude = position.coords.latitude;
+                    const longitude = position.coords.longitude;
+                    updateMapWithLocation(latitude, longitude);
+
+                    if (action === 'signOut') {
+                        document.getElementById('locationInput').value = 'Fetching location...';
+                    }
+                }, function(error) {
+                    // Handle errors if the user denies location access or if there's an issue.
+                    console.error("Error getting location:", error.message);
+                });
+            } else {
+                // Geolocation is not available in this browser.
+                // Provide a fallback or error message to the user.
+                console.log("Geolocation is not supported in this browser.");
+            }
+        }
+
+        // Load the Bing Map when the window loads
+        window.onload = function() {
+            loadMapScenario();
+        };
+    </script>
+</body>
+</html>
