@@ -309,10 +309,16 @@ app.get('/signout-success', (req, res) => {
     res.send('Sign-Out successful!'); // You can customize this response or render a success page here
 });
 
-
 // Start the server
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, async () => {
     console.log(`Server is running on port ${PORT}`);
-    await connectMongoDB(); // Connect to MongoDB when the server starts
+    try {
+        await connectMongoDB();
+        console.log('Connected to MongoDB');
+    } catch (error) {
+        console.error('Error connecting to MongoDB:', error.message);
+    }
 });
+
+
