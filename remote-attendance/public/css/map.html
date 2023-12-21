@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Map with Multiple Pushpins</title>
+    <meta charset="utf-8" />
+    <script type='text/javascript' src='https://www.bing.com/api/maps/mapcontrol?key=AgkWMZlk5ts6xb8cJkzUar2iJMWTexduafRzsyANqeAF2b_PN0D2CZAKo8hfNqkB'></script>
+    <style>
+        #map {
+            height: 400px;
+        }
+    </style>
+</head>
+<body>
+    <div id="map"></div>
+    
+    <script>
+        let map;
+
+        function loadMapScenario() {
+            map = new Microsoft.Maps.Map(document.getElementById('map'), {
+                credentials: 'AgkWMZlk5ts6xb8cJkzUar2iJMWTexduafRzsyANqeAF2b_PN0D2CZAKo8hfNqkB'
+            });
+
+            // Assuming 'data' is passed from the server-side
+            data.forEach(entry => {
+                const location = new Microsoft.Maps.Location(5.027297, 115.072052); // Use latitude and longitude from your data
+                const pin = new Microsoft.Maps.Pushpin(location);
+                map.entities.push(pin);
+            });
+        }
+    </script>
+
+    <script type='text/javascript' src='https://www.bing.com/api/maps/mapcontrol?callback=loadMapScenario' async defer></script>
+</body>
+</html>
