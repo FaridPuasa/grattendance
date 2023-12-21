@@ -206,7 +206,7 @@ app.post('/attendance', async (req, res) => {
 
     if (latitude && longitude) {
         try {
-            const attendanceCollection = db.collection('attendance');
+            const attendanceCollection = db.collection('attendanceData');
 
             await attendanceCollection.insertOne({
                 location: { type: 'Point', coordinates: [parseFloat(longitude), parseFloat(latitude)] },
@@ -255,7 +255,7 @@ app.post('/signin', async (req, res) => {
     const currentTime = new Date().toLocaleTimeString();
 
     try {
-        const attendanceCollection = db.collection('attendance'); // Get attendanceCollection from the database
+        const attendanceCollection = db.collection('attendanceData'); // Get attendanceCollection from the database
 
         const existingUser = await attendanceCollection.findOne({ username });
 
@@ -322,7 +322,7 @@ app.post('/signout', async (req, res) => {
     const currentTime = new Date().toLocaleTimeString();
 
     try {
-        const attendanceCollection = db.collection('attendance'); // Get attendanceCollection from the database
+        const attendanceCollection = db.collection('attendanceData'); // Get attendanceCollection from the database
 
         await attendanceCollection.updateOne(
             { username },
