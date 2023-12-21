@@ -74,7 +74,12 @@ async function readAttendanceDataFromDB(client) {
         }
         const attendanceCollection = db.collection('attendanceData');
         const attendanceData = await attendanceCollection.find({}).toArray();
-        console.log('Attendance data loaded from MongoDB:', attendanceData);
+        if (!attendanceData || attendanceData.length === 0) {
+            console.log('No attendance data found in the collection.');
+        } else {
+            console.log('Attendance data loaded from MongoDB:', attendanceData);
+        }
+
         return attendanceData;
     } catch (err) {
         console.error('Error loading attendance data from MongoDB:', err);
