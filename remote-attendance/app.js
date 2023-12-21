@@ -63,6 +63,8 @@ async function readAttendanceDataFromDB(client) {
     }
 }
 
+app.use(express.static(path.join(__dirname, 'public')));
+
 // Set 'views' directory for any views rendered
 app.set('views', path.join(__dirname, 'public', 'views'));
 
@@ -298,6 +300,12 @@ app.post('/signout', async (req, res) => {
         console.error('Error processing sign-out:', err);
         res.status(500).send('Error processing sign-out');
     }
+});
+
+// Route to handle the map
+app.get('/map', (req, res) => {
+    // Render the map.html file
+    res.sendFile(path.join(__dirname, 'public/css/map.html'));
 });
 
 // Route to handle successful sign-in

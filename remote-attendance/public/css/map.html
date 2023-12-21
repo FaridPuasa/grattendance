@@ -23,7 +23,7 @@
 
             // Assuming 'data' is passed from the server-side
             data.forEach(entry => {
-                const location = new Microsoft.Maps.Location(5.027297, 115.072052); // Use latitude and longitude from your data
+                const location = new Microsoft.Maps.Location(entry.latitude, entry.longitude); // Use latitude and longitude from your data
                 const pin = new Microsoft.Maps.Pushpin(location);
                 map.entities.push(pin);
             });
