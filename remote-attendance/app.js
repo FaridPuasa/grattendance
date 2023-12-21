@@ -43,7 +43,7 @@ async function insertUsersToDB() {
         console.log(`${result.insertedCount} users inserted`);
     } catch (err) {
         console.error('Error inserting users:', err);
-        throw err;
+        throw new Error('Failed to insert users to the database');
     }
 }
 
@@ -59,7 +59,7 @@ async function readAttendanceDataFromDB(client) {
         return attendanceData;
     } catch (err) {
         console.error('Error loading attendance data from MongoDB:', err);
-        throw err;
+        throw new Error('Failed to read attendance data from the database');
     }
 }
 
@@ -123,7 +123,7 @@ app.get('/', async (req, res) => {
         res.render('attendanceLog', { attendanceData });
     } catch (err) {
         console.error('Error loading attendance data:', err);
-        res.status(500).send('Error loading attendance data');
+        res.status(500).send('Error loading attendance data' + err.message);
     }
 });
 
@@ -319,6 +319,7 @@ app.listen(PORT, async () => {
         console.log('Connected to MongoDB');
     } catch (error) {
         console.error('Error connecting to MongoDB:', error.message);
+        process.exit(1);
     }
 });
 
