@@ -8,7 +8,6 @@ const mongodbUri = process.env.MONGODB_URI || 'mongodb+srv://itsupport:GSB110011
 const client = new MongoClient(mongodbUri, { useNewUrlParser: true, useUnifiedTopology: true });
 let db;
 
-// MongoDB connection
 async function connectMongoDB() {
     try {
         await client.connect();
@@ -17,7 +16,7 @@ async function connectMongoDB() {
         db = database;
         
         // After establishing the connection, call functions that depend on the database connection
-        await insertUsersToDB();
+        await insertUsersAndAttendanceDataToDB(); // Call to insert users and attendance data
         await readAttendanceDataFromDB(); // Call to load attendance data
     } catch (err) {
         console.error('Error connecting to MongoDB:', err);
@@ -44,9 +43,7 @@ const endDate = moment(); // Using the current date
 const daysDifference = endDate.diff(startDate, 'days');
 console.log('Days difference:', daysDifference); // Output: Days difference: 20
 
-
-// Insert users to the database
-async function insertUsersToDB() {
+async function insertUsersAndAttendanceDataToDB() {
     try {
         const users = [
             { name: 'Ema', email: 'ema.karmila@globex.com.bn', signIn: '00:00:00 AM', signOut: '12:00:00 PM' },
@@ -55,16 +52,28 @@ async function insertUsersToDB() {
             // Add more user objects as needed
         ];
 
+        const attendanceData = [
+            { username: 'Ema', location: 'Office', signIn: '09:00:00 AM', signOut: '06:00:00 PM', date: '2023-12-21' },
+            { username: 'Hasbul', location: 'Home', signIn: '10:00:00 AM', signOut: '05:00:00 PM', date: '2023-12-21' },
+            { username: 'Khai', location: 'Home', signIn: '10:00:00 AM', signOut: '05:00:00 PM', date: '2023-12-21' },
+            // Add more attendance records as needed
+        ];
+
         const database = client.db('LMS');
         const usersCollection = database.collection('users');
+        const attendanceCollection = database.collection('attendanceData');
 
-        const result = await usersCollection.insertMany(users);
-        console.log(`${result.insertedCount} users inserted`);
+        const resultUsers = await usersCollection.insertMany(users);
+        console.log(`${resultUsers.insertedCount} users inserted`);
+
+        const resultAttendance = await attendanceCollection.insertMany(attendanceData);
+        console.log(`${resultAttendance.insertedCount} attendance data inserted`);
     } catch (err) {
-        console.error('Error inserting users:', err);
-        throw new Error('Failed to insert users to the database');
+        console.error('Error inserting users and attendance data:', err);
+        throw new Error('Failed to insert data to the database');
     }
 }
+
 
 // Read attendance data from the database
 async function readAttendanceDataFromDB(client) {
@@ -74,6 +83,7 @@ async function readAttendanceDataFromDB(client) {
         }
         const attendanceCollection = db.collection('attendanceData');
         const attendanceData = await attendanceCollection.find({}).toArray();
+
         if (!attendanceData || attendanceData.length === 0) {
             console.log('No attendance data found in the collection.');
         } else {
