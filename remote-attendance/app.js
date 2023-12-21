@@ -25,6 +25,26 @@ async function connectMongoDB() {
     }
 }
 
+// Importing the moment library
+const moment = require('moment');
+
+// Example usage of moment.js
+const currentDate = moment(); // Get the current date and time
+
+// Formatting dates
+console.log('Current Date:', currentDate.format('YYYY-MM-DD')); // Output: Current Date: 2023-12-21
+
+// Adding or subtracting time
+const futureDate = moment().add(7, 'days'); // Get the date 7 days from now
+console.log('Future Date:', futureDate.format('YYYY-MM-DD')); // Output: Future Date: 2023-12-28
+
+// Calculating differences between dates
+const startDate = moment('2023-12-01', 'YYYY-MM-DD'); // Creating a specific date
+const endDate = moment(); // Using the current date
+const daysDifference = endDate.diff(startDate, 'days');
+console.log('Days difference:', daysDifference); // Output: Days difference: 20
+
+
 // Insert users to the database
 async function insertUsersToDB() {
     try {
