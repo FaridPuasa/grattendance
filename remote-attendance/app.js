@@ -3,9 +3,8 @@ const bodyParser = require('body-parser');
 const { MongoClient, ObjectId } = require('mongodb');
 const path = require('path');
 const app = express();
-const envVariables = require('./config/env_variables');
 
-const mongodbUri = envVariables.MONGODB_URI;
+const mongodbUri = process.env.MONGODB_URI || 'mongodb+srv://itsupport:GSB110011@cluster0.kkzdiku.mongodb.net/LMS?retryWrites=true&w=majority';
 const client = new MongoClient(mongodbUri, { useNewUrlParser: true, useUnifiedTopology: true });
 let db;
 
