@@ -76,7 +76,7 @@ async function insertUsersAndAttendanceDataToDB() {
 
 
 // Read attendance data from the database
-async function readAttendanceDataFromDB(client) {
+async function readAttendanceDataFromDB() {
     try {
         if (!db) {
             throw new Error('MongoDB connection not established.');
@@ -155,7 +155,7 @@ app.get('/protectedRoute', authenticateUser, (req, res) => {
 // Route for the root path to render the attendance log
 app.get('/', async (req, res) => {
     try {
-        const attendanceData = await readAttendanceDataFromDB(client);
+        const attendanceData = await readAttendanceDataFromDB();
         res.render('attendanceLog', { attendanceData });
     } catch (err) {
         console.error('Error loading attendance data:', err);
@@ -188,7 +188,7 @@ app.post('/add-attendance', async (req, res) => {
 app.get('/attendance-log', async (req, res) => {
     try {
         console.log('Attempting to retrieve attendance data...');
-        const attendanceData = await readAttendanceDataFromDB(client);
+        const attendanceData = await readAttendanceDataFromDB();
 
         res.render('attendanceLog', { attendanceData });
     } catch (err) {
