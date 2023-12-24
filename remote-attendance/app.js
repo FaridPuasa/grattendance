@@ -27,7 +27,6 @@ async function connectMongoDB() {
 // Importing the moment library
 const moment = require('moment-timezone');
 
-
 //Set the desired time zone (Singapore/Malaysia/Brunei)
 const bruneiTime = moment.tz(moment(), 'Asia/Brunei');
 
@@ -52,16 +51,16 @@ console.log('Days difference:', daysDifference); // Output: Days difference: 20
 async function insertUsersAndAttendanceDataToDB() {
     try {
         const users = [
-            { name: 'Ema', email: 'ema.karmila@globex.com.bn', signIn: '00:00:00 AM', signOut: '12:00:00 PM' },
-            { name: 'Hasbul', email: 'not applicable', signIn: '09:30:00 AM', signOut: '05:30:00 PM' },
-            { name: 'Khai', email: 'not applicable', signIn: '09:30:00 AM', signOut: '05:30:00 PM' },
+            { name: 'Ema', email: 'ema.karmila@globex.com.bn'},
+            { name: 'Hasbul', email: 'not applicable'},
+            { name: 'Khai', email: 'not applicable'},
             // Add more user objects as needed
         ];
 
         const attendanceData = [
-            { username: 'Ema', location: 'Office', signIn: '09:00:00 AM', signOut: '06:00:00 PM', date: '2023-12-21' },
-            { username: 'Hasbul', location: 'Home', signIn: '10:00:00 AM', signOut: '05:00:00 PM', date: '2023-12-21' },
-            { username: 'Khai', location: 'Home', signIn: '10:00:00 AM', signOut: '05:00:00 PM', date: '2023-12-21' },
+            { username: 'Ema', location: 'Office', signIn: new Date('2023-12-21T09:00:00Z'), signOut: new Date('2023-12-21T18:00:00Z') },
+            { username: 'Hasbul', location: 'Home', signIn: new Date('2023-12-21T10:00:00Z'), signOut: new Date('2023-12-21T17:00:00Z') },
+            { username: 'Khai', location: 'Home', signIn: new Date('2023-12-21T10:00:00Z'), signOut: new Date('2023-12-21T17:00:00Z') },
             // Add more attendance records as needed
         ];
 
