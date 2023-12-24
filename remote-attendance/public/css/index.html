@@ -32,6 +32,28 @@
                 console.error('Geolocation is not supported by this browser');
             }
         }
+
+        function getLocation() {
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(showPosition);
+            } else {
+                alert('Geolocation is not supported by this browser.');
+            }
+        }
+
+        function showPosition(position) {
+            const latitudeField = document.getElementById('latitude');
+            const longitudeField = document.getElementById('longitude');
+
+            latitudeField.value = position.coords.latitude;
+            longitudeField.value = position.coords.longitude;
+
+            // Optionally, you can automatically submit the form here if needed
+            // document.getElementById('attendanceForm').submit();
+        }
+
+        // Call getLocation function when the page loads or when needed
+        getLocation();
     </script>
 </head>
 <body>
@@ -60,8 +82,20 @@
     <!-- Attendance Recording Section -->
     <section class="attendance-recording">
         <h2>Record Attendance</h2>
-        <!-- Example button to trigger attendance recording -->
+        <!-- Geolocation-based attendance recording button -->
         <button onclick="recordAttendance()">Record Attendance</button>
+    </section>
+
+    <!-- Attendance Form Section -->
+    <section class="attendance-form">
+        <h2>Attendance Form</h2>
+        <!-- Form for latitude and longitude -->
+        <form id="attendanceForm" action="/attendance" method="POST">
+            <input type="hidden" id="latitude" name="latitude">
+            <input type="hidden" id="longitude" name="longitude">
+            <!-- Other attendance fields -->
+            <button type="submit">Record Attendance</button>
+        </form>
     </section>
 
     <!-- Other HTML content or scripts -->
