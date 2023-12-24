@@ -216,6 +216,9 @@ app.post('/attendance', async (req, res) => {
             await attendanceCollection.insertOne({
                 location: { type: 'Point', coordinates: [parseFloat(longitude), parseFloat(latitude)] },
                 timestamp: new Date(),
+                date: currentDate,
+                signIn: currentTime,
+                signOut: null // Assuming this will be updated later when user signs out
             });
 
             res.status(200).json({ message: 'Attendance recorded successfully' });
