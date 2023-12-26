@@ -53,7 +53,7 @@ function updateMapWithLocation(latitude, longitude) {
                     callback: function (result) {
                         if (result && result.results && result.results.length > 0) {
                             const address = result.results[0].address.formattedAddress;
-                            document.getElementById('locationInput').value = address;
+                            updateLocationFields(latitude, longitude, address); // Update location fields with the retrieved address
                         }
                     },
                     errorCallback: function (e) {
