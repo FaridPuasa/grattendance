@@ -267,9 +267,6 @@ app.post('/signin', async (req, res) => {
 
         const existingUser = await attendanceCollection.findOne({ username });
 
-        // Reverse geocode to get the location name
-        const locationName = await reverseGeocode(latitude, longitude);
-
         if (existingUser) {
             await attendanceCollection.updateOne(
                 { _id: new ObjectId(existingUser._id) },
