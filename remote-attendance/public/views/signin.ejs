@@ -25,6 +25,14 @@
 
     <!-- Your JavaScript for Bing Maps integration -->
     <script>
+
+let map;
+
+function loadMapScenario() {
+    map = new Microsoft.Maps.Map(document.getElementById('map'), {
+        credentials: 'AgkWMZlk5ts6xb8cJkzUar2iJMWTexduafRzsyANqeAF2b_PN0D2CZAKo8hfNqkB'
+    });
+}
         // Function to update the location fields in the form
         function updateLocationFields(latitude, longitude, address) {
             document.getElementById('latitudeInput').value = latitude;
