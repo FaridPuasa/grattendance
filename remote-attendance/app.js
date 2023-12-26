@@ -260,7 +260,7 @@ app.post('/signin', async (req, res) => {
 
     const { username, location, latitude, longitude } = req.body;
     const currentDate = new Date().toISOString().split('T')[0];
-    const currentTime = new Date().toLocaleTimeString();
+    const currentTime = moment().tz('Asia/Brunei').format('HH:mm:ss'); // Get time in Brunei timezone
 
     try {
         const attendanceCollection = db.collection('attendanceData'); // Get attendanceCollection from the database
