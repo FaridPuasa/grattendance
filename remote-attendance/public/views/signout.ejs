@@ -54,14 +54,17 @@ function updateMapWithLocation(latitude, longitude) {
                         if (result && result.results && result.results.length > 0) {
                             const address = result.results[0].address.formattedAddress;
                             updateLocationFields(latitude, longitude, address); // Update location fields with the retrieved address
+                        } else {
+                            updateLocationFields(latitude, longitude, 'Location not found'); // Handle case where location is not found
                         }
-                    },
-                    errorCallback: function (e) {
-                        // Handle error
-                    }
-                };
-                searchManager.reverseGeocode(reverseGeocodeRequestOptions);
-            });
+                 },
+                 errorCallback: function (e) {
+                    // Handle error
+                    updateLocationFields(latitude, longitude, 'Error fetching location'); // Handle error case
+                 }
+            };
+             searchManager.reverseGeocode(reverseGeocodeRequestOptions);
+          });
         }
 
         // Function to update the location fields in the form
