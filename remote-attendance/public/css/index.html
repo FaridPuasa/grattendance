@@ -73,10 +73,10 @@
                     <p><strong>Location:</strong> <%= entry.location %></p>
                 </div>
             <% }); %>
-        <% } else { %>
+            <% } else { %>
             <p>No attendance records found.</p>
-        <% } %>
-    </div>
+            <% } %>
+        </div>
     </section>
 
     <!-- Attendance Recording Section -->
@@ -91,7 +91,6 @@
         <h2>Attendance Form</h2>
         <!-- Form for latitude and longitude -->
         <form id="attendanceForm" action="/attendance" method="POST">
-            <input type="number" id="latitude" name="latitude" >
             <input type="number" id="latitude" name="latitude" step="any" min="-90" max="90">
             <input type="number" id="longitude" name="longitude" step="any" min="-180" max="180">
             <!-- Other attendance fields -->
