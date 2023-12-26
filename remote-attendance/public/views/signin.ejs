@@ -8,21 +8,17 @@
 </head>
 <body>
     <h1>Sign In</h1>
-    
+
     <!-- Add a div for the Bing Maps -->
     <div id="map" style="width: 50%; height: 400px;"></div>
 
-    <!-- Form for sign-in -->
+   <!-- Form for sign-in -->
     <form id="signInForm" method="POST" action="/signin">
         <label for="username">Username:</label>
         <input type="text" name="username" required>
-        <label for="location">Location:</label>
-        <input type="text" id="locationInput" name="location" required>
         <input type="hidden" name="action" value="Sign In">
         <label for="time">Sign In Time:</label>
         <input type="time" name="timestamp" required>
-        <label for="date">Date:</label>
-        <input type="date" name="date" required>
         <button type="button" onclick="getLocation('signIn')">Get Location for Sign In</button>
         <button type="submit">Sign In</button>
     </form>
@@ -32,39 +28,29 @@
         let map;
 
         function loadMapScenario() {
+            // Initialize Bing Maps
             map = new Microsoft.Maps.Map(document.getElementById('map'), {
-                credentials: 'AgkWMZlk5ts6xb8cJkzUar2iJMWTexduafRzsyANqeAF2b_PN0D2CZAKo8hfNqkB'
+                credentials: 'YOUR_BING_MAPS_API_KEY' // Replace with your Bing Maps API key
             });
         }
 
+        // Function to update the map with the user's location
         function updateMapWithLocation(latitude, longitude) {
+            // Code to update the Bing Map with the user's location
+            // Use latitude and longitude to set the map view and display a marker
+            // Example code:
             const userLocation = new Microsoft.Maps.Location(latitude, longitude);
             map.setView({ center: userLocation, zoom: 10 });
 
-            // Example marker at the user's location
             const pin = new Microsoft.Maps.Pushpin(userLocation);
             map.entities.push(pin);
-
-            // Reverse geocode to get the address based on latitude and longitude
-            Microsoft.Maps.loadModule('Microsoft.Maps.Search', function () {
-                const searchManager = new Microsoft.Maps.Search.SearchManager(map);
-                const reverseGeocodeRequestOptions = {
-                    location: userLocation,
-                    callback: function (result) {
-                        if (result && result.results && result.results.length > 0) {
-                            const address = result.results[0].address.formattedAddress;
-                            document.getElementById('locationInput').value = address;
-                        }
-                    },
-                    errorCallback: function (e) {
-                        // Handle error
-                    }
-                };
-                searchManager.reverseGeocode(reverseGeocodeRequestOptions);
-            });
         }
 
+        // Function to retrieve the user's location
         function getLocation(action) {
+            // Code to get the user's location and update the map
+            // Use the updateMapWithLocation function to display the location on the map
+            // Example code (similar to your existing code):
             if ("geolocation" in navigator) {
                 navigator.geolocation.getCurrentPosition(function(position) {
                     const latitude = position.coords.latitude;
@@ -75,12 +61,11 @@
                         document.getElementById('locationInput').value = 'Fetching location...';
                     }
                 }, function(error) {
-                    // Handle errors if the user denies location access or if there's an issue.
+                    // Handle errors
                     console.error("Error getting location:", error.message);
                 });
             } else {
-                // Geolocation is not available in this browser.
-                // Provide a fallback or error message to the user.
+                // Handle case where geolocation is not available
                 console.log("Geolocation is not supported in this browser.");
             }
         }
@@ -91,4 +76,3 @@
         };
     </script>
 </body>
-</html>
