@@ -14,18 +14,11 @@
     <div id="map" style="width: 50%; height: 400px;"></div>
 
    <!-- Form for sign-in -->
-   <form id="signInForm" method="POST" action="/signin">
-    <label for="username">Username:</label>
-    <input type="text" name="username" required>
-    <input type="hidden" name="action" value="Sign In">
-    <label for="time">Sign In Time:</label>
-    <input type="time" name="timestamp" required>
-    <input type="hidden" id="latitudeInput" name="latitude" value="">
-    <input type="hidden" id="longitudeInput" name="longitude" value="">
-    <input type="text" id="locationInput" name="location" placeholder="Location" readonly>
-    <button type="button" onclick="getLocation()">Get Location for Sign In</button>
-    <button type="submit">Sign In</button>
-   </form>
+   <form action="/signin" method="POST">
+    <input type="hidden" id="latitude" name="latitude" value="YOUR_LATITUDE" />
+    <input type="hidden" id="longitude" name="longitude" value="YOUR_LONGITUDE" />
+    <button type="submit" id="signInBtn">Sign In</button>
+</form>
 
     <!-- Your JavaScript for Bing Maps integration -->
     <script>
@@ -79,33 +72,34 @@ function loadMapScenario() {
 
 // Function to get the user's location
 function getLocation() {
-    if ("geolocation" in navigator) {
-        navigator.geolocation.getCurrentPosition(function (position) {
-            const latitude = position.coords.latitude;
-            const longitude = position.coords.longitude;
-
-            // Use reverse geocoding to get the address from latitude and longitude
-            updateMapWithLocation(latitude, longitude); // Update map with the user's location
-        }, function (error) {
-            // Handle errors if the user denies location access or if there's an issue
-            console.error("Error getting location:", error.message);
-        });
-    } else {
-        // Geolocation is not available in this browser
-        console.log("Geolocation is not supported in this browser.");
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(showPosition);
+        } else {
+            alert("Geolocation is not supported by this browser.");
+        }
     }
-}
 
-// Automatically fetch the user's location when the page loads
-window.onload = function () {
-    getLocation();
-};
-    
-// Function to handle sign-in
-function signIn() {
-    getLocation(); // Update location fields
-// Additional logic to submit the form data with location and time information
-}
-    </script>
+    // Function to display position and submit the form with current location
+    function showPosition(position) {
+        const latitude = position.coords.latitude;
+        const longitude = position.coords.longitude;
+
+        // Set latitude and longitude values in the hidden input fields
+        document.getElementById("latitude").value = latitude;
+        document.getElementById("longitude").value = longitude;
+
+        // Submit the form when location is obtained
+        document.getElementById("signInBtn").click(); // or document.getElementById("signOutBtn").click();
+    }
+
+    // Event listeners for sign-in and sign-out buttons
+    document.getElementById("signInBtn").addEventListener("click", () => {
+        getLocation(); // Get location and submit sign-in form
+    });
+
+    document.getElementById("signOutBtn").addEventListener("click", () => {
+        getLocation(); // Get location and submit sign-out form
+    });
+</script>
 </body>
 </html>
