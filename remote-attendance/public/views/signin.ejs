@@ -37,36 +37,6 @@ function loadMapScenario() {
         credentials: 'AgkWMZlk5ts6xb8cJkzUar2iJMWTexduafRzsyANqeAF2b_PN0D2CZAKo8hfNqkB'
     });
 }
-function updateMapWithLocation(latitude, longitude) {
-            const userLocation = new Microsoft.Maps.Location(latitude, longitude);
-            map.setView({ center: userLocation, zoom: 10 });
-
-            // Example marker at the user's location
-            const pin = new Microsoft.Maps.Pushpin(userLocation);
-            map.entities.push(pin);
-
-            // Reverse geocode to get the address based on latitude and longitude
-            Microsoft.Maps.loadModule('Microsoft.Maps.Search', function () {
-                const searchManager = new Microsoft.Maps.Search.SearchManager(map);
-                const reverseGeocodeRequestOptions = {
-                    location: userLocation,
-                    callback: function (result) {
-                        if (result && result.results && result.results.length > 0) {
-                            const address = result.results[0].address.formattedAddress;
-                            updateLocationFields(latitude, longitude, address); // Update location fields with the retrieved address
-                        } else {
-                            updateLocationFields(latitude, longitude, 'Location not found'); // Handle case where location is not found
-                        }
-                 },
-                 errorCallback: function (e) {
-                    // Handle error
-                    updateLocationFields(latitude, longitude, 'Error fetching location'); // Handle error case
-                 }
-            };
-             searchManager.reverseGeocode(reverseGeocodeRequestOptions);
-          });
-        }
-
         // Function to update the location fields in the form
         function updateLocationFields(latitude, longitude, address) {
             document.getElementById('latitudeInput').value = latitude;
@@ -74,39 +44,66 @@ function updateMapWithLocation(latitude, longitude) {
             document.getElementById('locationInput').value = address;
         }
     
-        // Function to get the user's location
-        function getLocation() {
-            if ("geolocation" in navigator) {
-                navigator.geolocation.getCurrentPosition(function (position) {
-                    const latitude = position.coords.latitude;
-                    const longitude = position.coords.longitude;
-    
-                     // Use reverse geocoding to get the address from latitude and longitude
-                     updateMapWithLocation(latitude, longitude); // Update map with the user's location
-                     updateLocationFields(latitude, longitude, 'Fetching location...');
-    
-                    // Additional logic for reverse geocoding to get address information
-                    // Update the 'locationInput' field with the retrieved address
-                }, function (error) {
-                    // Handle errors if the user denies location access or if there's an issue
-                    console.error("Error getting location:", error.message);
-                });
-            } else {
-                // Geolocation is not available in this browser
-                console.log("Geolocation is not supported in this browser.");
+        // Function to update the map with location and reverse geocode to get the address
+function updateMapWithLocation(latitude, longitude) {
+    const userLocation = new Microsoft.Maps.Location(latitude, longitude);
+    map.setView({ center: userLocation, zoom: 10 });
+
+    // Example marker at the user's location
+    const pin = new Microsoft.Maps.Pushpin(userLocation);
+    map.entities.push(pin);
+
+    // Reverse geocode to get the address based on latitude and longitude
+    Microsoft.Maps.loadModule('Microsoft.Maps.Search', function () {
+        const searchManager = new Microsoft.Maps.Search.SearchManager(map);
+        const reverseGeocodeRequestOptions = {
+            location: userLocation,
+            callback: function (result) {
+                if (result && result.results && result.results.length > 0) {
+                    const address = result.results[0].address.formattedAddress;
+                    updateLocationFields(latitude, longitude, address); // Update location fields with the retrieved address
+                } else {
+                    updateLocationFields(latitude, longitude, 'Location not found'); // Handle case where location is not found
+                }
+            },
+            errorCallback: function (e) {
+                // Handle error
+                updateLocationFields(latitude, longitude, 'Error fetching location'); // Handle error case
             }
-        }
-    
-        // Automatically fetch the user's location when the page loads
-        window.onload = function () {
-            getLocation();
         };
+        searchManager.reverseGeocode(reverseGeocodeRequestOptions);
+    });
+}
+
+// Function to get the user's location
+function getLocation() {
+    if ("geolocation" in navigator) {
+        navigator.geolocation.getCurrentPosition(function (position) {
+            const latitude = position.coords.latitude;
+            const longitude = position.coords.longitude;
+
+            // Use reverse geocoding to get the address from latitude and longitude
+            updateMapWithLocation(latitude, longitude); // Update map with the user's location
+        }, function (error) {
+            // Handle errors if the user denies location access or if there's an issue
+            console.error("Error getting location:", error.message);
+        });
+    } else {
+        // Geolocation is not available in this browser
+        console.log("Geolocation is not supported in this browser.");
+    }
+}
+
+// Automatically fetch the user's location when the page loads
+window.onload = function () {
+    getLocation();
+};
     
-        // Function to handle sign-in
-        function signIn() {
-            getLocation(); // Update location fields
-            // Additional logic to submit the form data with location and time information
-        }
+// Function to handle sign-in
+function signIn() {
+getLocation(); // Update location fields
+// Additional logic to submit the form data with location and time information
+}
     </script>
 </body>
 </html>
