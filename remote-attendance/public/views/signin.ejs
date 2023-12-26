@@ -68,7 +68,7 @@ function loadMapScenario() {
                     },
                     errorCallback: function (e) {
                         // Display error details in the console
-                        console.error('Reverse geocode request failed. Details:', e);
+                        console.error('Error during reverse geocoding:', e);
                         updateLocationFields(latitude, longitude, 'Error fetching location'); // Handle error case
                     }
                 };
