@@ -15,8 +15,10 @@
 
    <!-- Form for sign-in -->
    <form action="/signout" method="POST">
-    <input type="hidden" id="latitude" name="latitude" value="YOUR_LATITUDE" />
-    <input type="hidden" id="longitude" name="longitude" value="YOUR_LONGITUDE" />
+    <label for="username">Username:</label>
+    <input type="text" name="username" required>
+    <input type="hidden" id="latitude" name="latitude" value="" />
+    <input type="hidden" id="longitude" name="longitude" value="" />
     <button type="submit" id="signOutBtn">Sign Out</button>
 </form>
 
