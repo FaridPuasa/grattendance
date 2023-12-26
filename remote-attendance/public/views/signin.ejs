@@ -25,54 +25,45 @@
 
     <!-- Your JavaScript for Bing Maps integration -->
     <script>
-        let map;
-
-        function loadMapScenario() {
-            // Initialize Bing Maps
-            map = new Microsoft.Maps.Map(document.getElementById('map'), {
-                credentials: 'AgkWMZlk5ts6xb8cJkzUar2iJMWTexduafRzsyANqeAF2b_PN0D2CZAKo8hfNqkB' // Replace with your Bing Maps API key
-            });
+        // Function to update the location fields in the form
+        function updateLocationFields(latitude, longitude, address) {
+            document.getElementById('latitudeInput').value = latitude;
+            document.getElementById('longitudeInput').value = longitude;
+            document.getElementById('locationInput').value = address;
         }
-
-        // Function to update the map with the user's location
-        function updateMapWithLocation(latitude, longitude) {
-            // Code to update the Bing Map with the user's location
-            // Use latitude and longitude to set the map view and display a marker
-            // Example code:
-            const userLocation = new Microsoft.Maps.Location(latitude, longitude);
-            map.setView({ center: userLocation, zoom: 10 });
-
-            const pin = new Microsoft.Maps.Pushpin(userLocation);
-            map.entities.push(pin);
-        }
-
-        // Function to retrieve the user's location
-        function getLocation(action) {
-            // Code to get the user's location and update the map
-            // Use the updateMapWithLocation function to display the location on the map
-            // Example code (similar to your existing code):
+    
+        // Function to get the user's location
+        function getLocation() {
             if ("geolocation" in navigator) {
-                navigator.geolocation.getCurrentPosition(function(position) {
+                navigator.geolocation.getCurrentPosition(function (position) {
                     const latitude = position.coords.latitude;
                     const longitude = position.coords.longitude;
-                    updateMapWithLocation(latitude, longitude);
-
-                    if (action === 'signIn') {
-                        document.getElementById('locationInput').value = 'Fetching location...';
-                    }
-                }, function(error) {
-                    // Handle errors
+    
+                    // Use reverse geocoding to get the address from latitude and longitude
+                    // Update the form fields with the location details
+                    updateLocationFields(latitude, longitude, 'Fetching location...');
+    
+                    // Additional logic for reverse geocoding to get address information
+                    // Update the 'locationInput' field with the retrieved address
+                }, function (error) {
+                    // Handle errors if the user denies location access or if there's an issue
                     console.error("Error getting location:", error.message);
                 });
             } else {
-                // Handle case where geolocation is not available
+                // Geolocation is not available in this browser
                 console.log("Geolocation is not supported in this browser.");
             }
         }
-
-        // Load the Bing Map when the window loads
-        window.onload = function() {
-            loadMapScenario();
+    
+        // Automatically fetch the user's location when the page loads
+        window.onload = function () {
+            getLocation();
         };
+    
+        // Function to handle sign-in
+        function signIn() {
+            getLocation(); // Update location fields
+            // Additional logic to submit the form data with location and time information
+        }
     </script>
 </body>
