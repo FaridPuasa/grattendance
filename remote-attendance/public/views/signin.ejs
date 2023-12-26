@@ -19,8 +19,7 @@
     <input type="text" name="username" required>
     <input type="hidden" id="latitude" name="latitude" value="YOUR_LATITUDE" />
     <input type="hidden" id="longitude" name="longitude" value="YOUR_LONGITUDE" />
-    <input type="text" id="location" name="location" placeholder="Location" readonly>
-    <button type="button" onclick="handleFormSubmission()">Sign In</button>
+    <button type="submit" id="signInBtn">Sign In</button>
 </form>
 
     <!-- Your JavaScript for Bing Maps integration -->
@@ -33,25 +32,52 @@ function loadMapScenario() {
         credentials: 'AgkWMZlk5ts6xb8cJkzUar2iJMWTexduafRzsyANqeAF2b_PN0D2CZAKo8hfNqkB'
     });
 }
-      
-    // Function to update the location fields in the form
-    function updateLocationFields(latitude, longitude, address) {
-        document.getElementById('latitude').value = latitude;
-        document.getElementById('longitude').value = longitude;
-        document.getElementById('location').value = address;
-    }
+        // Function to update the location fields in the form
+        function updateLocationFields(latitude, longitude, address) {
+            document.getElementById('latitudeInput').value = latitude;
+            document.getElementById('longitudeInput').value = longitude;
+            document.getElementById('locationInput').value = address;
+        }
+    
+       // Function to update the map with location and reverse geocode to get the address
+       function updateMapWithLocation(latitude, longitude) {
+            const userLocation = new Microsoft.Maps.Location(latitude, longitude);
+            map.setView({ center: userLocation, zoom: 10 });
 
-    // Function to handle form submission
-    function handleFormSubmission() {
-        getLocation(); // Get location and submit the form
-    }
+            // Example marker at the user's location
+            const pin = new Microsoft.Maps.Pushpin(userLocation);
+            map.entities.push(pin);
 
-    // Function to get the user's location
-    function getLocation() {
+            // Reverse geocode to get the address based on latitude and longitude
+            Microsoft.Maps.loadModule('Microsoft.Maps.Search', function () {
+                const searchManager = new Microsoft.Maps.Search.SearchManager(map);
+                const reverseGeocodeRequestOptions = {
+                    location: userLocation,
+                    callback: function (result) {
+                        if (result && result.results && result.results.length > 0) {
+                            const address = result.results[0].address.formattedAddress;
+                            updateLocationFields(latitude, longitude, address); // Update location fields with the retrieved address
+                        } else {
+                            updateLocationFields(latitude, longitude, 'Location not found'); // Handle case where location is not found
+                        }
+                    },
+                    errorCallback: function (e) {
+                        // Display error details in the console
+                        console.error('Error during reverse geocoding:', e);
+                        updateLocationFields(latitude, longitude, 'Error fetching location'); // Handle error case
+                    }
+                };
+                searchManager.reverseGeocode(reverseGeocodeRequestOptions);
+            });
+        
+}
+
+// Function to get the user's location
+function getLocation() {
         if (navigator.geolocation) {
             navigator.geolocation.getCurrentPosition(showPosition);
         } else {
-            alert('Geolocation is not supported by this browser.');
+            alert("Geolocation is not supported by this browser.");
         }
     }
 
@@ -61,50 +87,13 @@ function loadMapScenario() {
         const longitude = position.coords.longitude;
 
         // Set latitude and longitude values in the hidden input fields
-        document.getElementById('latitude').value = latitude;
-        document.getElementById('longitude').value = longitude;
+        document.getElementById("latitude").value = latitude;
+        document.getElementById("longitude").value = longitude;
 
-        // Perform reverse geocoding to get the location name
-        updateMapWithLocation(latitude, longitude); // Update map with the user's location
-
-
+        // Submit the form when location is obtained
+        document.getElementById("signInBtn").click(); // or document.getElementById("signOutBtn").click();
     }
 
-    // Function to update the map with location and reverse geocode to get the address
-    function updateMapWithLocation(latitude, longitude) {
-        const userLocation = new Microsoft.Maps.Location(latitude, longitude);
-            map.setView({ center: userLocation, zoom: 10 });
-
-            // Example marker at the user's location
-            const pin = new Microsoft.Maps.Pushpin(userLocation);
-            map.entities.push(pin);
-
-        // Reverse geocode to get the address based on latitude and longitude
-        Microsoft.Maps.loadModule('Microsoft.Maps.Search', function () {
-            const searchManager = new Microsoft.Maps.Search.SearchManager(map);
-            const reverseGeocodeRequestOptions = {
-                location: userLocation,
-                callback: function (result) {
-                    if (result && result.results && result.results.length > 0) {
-                        const address = result.results[0].address.formattedAddress;
-                        updateLocationFields(latitude, longitude, address); // Update location fields with the retrieved address
-                        document.getElementById('location').value = address; // Update location field in the form
-                    } else {
-                        updateLocationFields(latitude, longitude, 'Location not found'); // Handle case where location is not found
-                    }
-                },
-                errorCallback: function (e) {
-                    console.error('Error during reverse geocoding:', e);
-                    updateLocationFields(latitude, longitude, 'Error fetching location'); // Handle error case
-                }
-            };
-            searchManager.reverseGeocode(reverseGeocodeRequestOptions);
-        });
-    }
-
-    // Submit the form when location is obtained
-    document.getElementById("signInBtn").click(); // or document.getElementById("signOutBtn").click();
- 
     // Event listeners for sign-in and sign-out buttons
     document.getElementById("signInBtn").addEventListener("click", () => {
         getLocation(); // Get location and submit sign-in form
