@@ -40,7 +40,26 @@ function updateMapWithLocation(latitude, longitude) {
             // Example marker at the user's location
             const pin = new Microsoft.Maps.Pushpin(userLocation);
             map.entities.push(pin);
-            
+
+            // Reverse geocode to get the address based on latitude and longitude
+            Microsoft.Maps.loadModule('Microsoft.Maps.Search', function () {
+                const searchManager = new Microsoft.Maps.Search.SearchManager(map);
+                const reverseGeocodeRequestOptions = {
+                    location: userLocation,
+                    callback: function (result) {
+                        if (result && result.results && result.results.length > 0) {
+                            const address = result.results[0].address.formattedAddress;
+                            document.getElementById('locationInput').value = address;
+                        }
+                    },
+                    errorCallback: function (e) {
+                        // Handle error
+                    }
+                };
+                searchManager.reverseGeocode(reverseGeocodeRequestOptions);
+            });
+        }
+
         // Function to update the location fields in the form
         function updateLocationFields(latitude, longitude, address) {
             document.getElementById('latitudeInput').value = latitude;
@@ -83,3 +102,4 @@ function updateMapWithLocation(latitude, longitude) {
         }
     </script>
 </body>
+</html>
