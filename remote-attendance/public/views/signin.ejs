@@ -33,6 +33,14 @@ function loadMapScenario() {
         credentials: 'AgkWMZlk5ts6xb8cJkzUar2iJMWTexduafRzsyANqeAF2b_PN0D2CZAKo8hfNqkB'
     });
 }
+function updateMapWithLocation(latitude, longitude) {
+            const userLocation = new Microsoft.Maps.Location(latitude, longitude);
+            map.setView({ center: userLocation, zoom: 10 });
+
+            // Example marker at the user's location
+            const pin = new Microsoft.Maps.Pushpin(userLocation);
+            map.entities.push(pin);
+            
         // Function to update the location fields in the form
         function updateLocationFields(latitude, longitude, address) {
             document.getElementById('latitudeInput').value = latitude;
