@@ -256,19 +256,13 @@ const { time } = require('console');
 
 // Route to handle sign-in form submission
 app.post('/signin', async (req, res) => {
+    await connectMongoDB(); // Ensure MongoDB connection before processing sign-in
 
     const { username, latitude, longitude } = req.body;
     const currentDate = new Date().toISOString().split('T')[0];
     const currentTime = moment().tz('Asia/Brunei').format('HH:mm:ss'); // Get time in Brunei timezone
 
     try {
-
-        // Ensure that MongoDB connection is established before processing sign-in
-        if (!isConnected) {
-            await connectMongoDB();
-            isConnected = true;
-        }
-        
         const attendanceCollection = db.collection('attendanceData'); // Get attendanceCollection from the database
 
         const existingUser = await attendanceCollection.findOne({ username });
@@ -309,26 +303,6 @@ app.post('/signin', async (req, res) => {
         res.status(500).send('Error processing sign-in');
     }
 });
-
-// Function to perform reverse geocoding
-async function reverseGeocode(latitude, longitude) {
-    const apiKey = 'AgkWMZlk5ts6xb8cJkzUar2iJMWTexduafRzsyANqeAF2b_PN0D2CZAKo8hfNqkB'; // Replace with your Bing Maps API key
-
-    try {
-        const response = await fetch(`https://dev.virtualearth.net/REST/v1/Locations/${latitude},${longitude}?key=${apiKey}`);
-
-        if (response.ok) {
-            const data = await response.json();
-            const location = data.resourceSets[0]?.resources[0]?.name || 'Location not found';
-            return location;
-        } else {
-            throw new Error('Error fetching location details');
-        }
-    } catch (error) {
-        console.error('Error during reverse geocoding:', error);
-        return 'Error fetching location';
-    }
-}
 
 // Route to render the sign-out form
 app.get('/signout', async (req, res) => {
@@ -389,21 +363,15 @@ app.get('/signout-success', (req, res) => {
     res.send('Sign-Out successful!'); // You can customize this response or render a success page here
 });
 
-// Initialize the MongoDB connection when the server starts
-(async () => {
+// Start the server
+const PORT = process.env.PORT || 3000;
+app.listen(PORT, async () => {
+    console.log(`Server is running on port ${PORT}`);
     try {
         await connectMongoDB();
         console.log('Connected to MongoDB');
-        isConnected = true;
-
-        // Start the server after successfully connecting to MongoDB
-        const PORT = process.env.PORT || 3000;
-        app.listen(PORT, () => {
-            console.log(`Server is running on port ${PORT}`);
-        });
     } catch (error) {
         console.error('Error connecting to MongoDB:', error.message);
         process.exit(1);
     }
-})();
-
+});
