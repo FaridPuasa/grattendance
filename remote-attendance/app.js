@@ -327,7 +327,7 @@ app.post('/signout', async (req, res) => {
     await connectMongoDB(); // Ensure MongoDB connection before processing sign-out
 
     const { username } = req.body;
-    const currentTime = new Date().toLocaleTimeString();
+    const currentTime = moment().tz('Asia/Brunei').format('HH:mm:ss'); // Get time in Brunei timezone
 
     try {
         const attendanceCollection = db.collection('attendanceData'); // Get attendanceCollection from the database
