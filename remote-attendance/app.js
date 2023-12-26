@@ -274,8 +274,8 @@ app.post('/signin', async (req, res) => {
                     $set: {
                         signIn: currentTime,
                         location,
-                        latitude,
-                        longitude,
+                        latitude: parseFloat(latitude), // Parse latitude to float
+                        longitude: parseFloat(longitude), // Parse longitude to float
                         date: currentDate
                     }
                 }
@@ -287,8 +287,8 @@ app.post('/signin', async (req, res) => {
                 signIn: currentTime,
                 signOut: null,
                 location,
-                latitude,
-                longitude,
+                latitude: parseFloat(latitude), // Parse latitude to float
+                longitude: parseFloat(longitude), // Parse longitude to float
                 date: currentDate
             });
             console.log('Added new sign-in entry:', username);
