@@ -1,29 +1,29 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Sign In</title>
+    <title>Sign Out</title>
     
     <!-- Include the Bing Maps script -->
 <script src="https://www.bing.com/api/maps/mapcontrol?key=AgkWMZlk5ts6xb8cJkzUar2iJMWTexduafRzsyANqeAF2b_PN0D2CZAKo8hfNqkB&callback=loadMapScenario" async defer></script>
 
 </head>
 <body>
-    <h1>Sign In</h1>
+    <h1>Sign Out</h1>
 
     <!-- Add a div for the Bing Maps -->
     <div id="map" style="width: 50%; height: 400px;"></div>
 
    <!-- Form for sign-in -->
-   <form id="signInForm" method="POST" action="/signin">
+   <form id="signOutForm" method="POST" action="/signout">
     <label for="username">Username:</label>
     <input type="text" name="username" required>
-    <input type="hidden" name="action" value="Sign In">
-    <label for="time">Sign In Time:</label>
+    <input type="hidden" name="action" value="Sign Out">
+    <label for="time">Sign Out Time:</label>
     <input type="time" name="timestamp" required>
     <input type="hidden" id="latitudeInput" name="latitude" value="">
     <input type="hidden" id="longitudeInput" name="longitude" value="">
     <input type="text" id="locationInput" name="location" placeholder="Location" readonly>
-    <button type="button" onclick="getLocation()">Get Location for Sign In</button>
+    <button type="button" onclick="getLocation()">Get Location for Sign Out</button>
     <button type="submit">Sign In</button>
    </form>
 
@@ -101,8 +101,8 @@ window.onload = function () {
     getLocation();
 };
     
-// Function to handle sign-in
-function signIn() {
+// Function to handle sign-out
+function signOut() {
     getLocation(); // Update location fields
 // Additional logic to submit the form data with location and time information
 }
