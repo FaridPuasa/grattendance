@@ -27,10 +27,10 @@ async function connectMongoDB() {
 // Importing the moment library
 const moment = require('moment-timezone');
 
-//Set the desired time zone (Singapore/Malaysia/Brunei)
-const bruneiTime = moment.tz(moment(), 'Asia/Brunei');
+// Set the desired time zone (Singapore/Malaysia/Brunei)
+const bruneiTime = moment.tz('Asia/Brunei').format('YYYY-MM-DD HH:mm:ss');
 
-console.log('Current Date in Singapore/Malaysia/Brunei:', bruneiTime.format('YYYY-MM-DD HH:mm:ss'));
+console.log('Current Date in Singapore/Malaysia/Brunei:', bruneiTime);
 
 // Example usage of moment.js
 const currentDate = moment(); // Get the current date and time
