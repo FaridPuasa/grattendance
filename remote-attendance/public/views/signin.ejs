@@ -5,6 +5,7 @@
     
     <!-- Include the Bing Maps script -->
 <script src="https://www.bing.com/api/maps/mapcontrol?key=AgkWMZlk5ts6xb8cJkzUar2iJMWTexduafRzsyANqeAF2b_PN0D2CZAKo8hfNqkB&callback=loadMapScenario" async defer></script>
+<script src="scripts/signInScript.js" defer></script>
 
 </head>
 <body>
@@ -14,7 +15,7 @@
     <div id="map" style="width: 50%; height: 400px;"></div>
 
    <!-- Form for sign-in -->
-   <form action="/signin" method="POST">
+   <form id="signInForm" action="/signin" method="POST">
     <label for="username">Username:</label>
     <input type="text" name="username" required>
     <input type="hidden" id="latitude" name="latitude" value="YOUR_LATITUDE" />
@@ -94,14 +95,29 @@ function getLocation() {
         document.getElementById("signInBtn").click(); // or document.getElementById("signOutBtn").click();
     }
 
-    // Event listeners for sign-in and sign-out buttons
-    document.getElementById("signInBtn").addEventListener("click", () => {
-        getLocation(); // Get location and submit sign-in form
-    });
+    // Event listener for sign-in form submission
+document.getElementById("signInForm").addEventListener("submit", async (event) => {
+    event.preventDefault(); // Prevent default form submission
 
-    document.getElementById("signOutBtn").addEventListener("click", () => {
-        getLocation(); // Get location and submit sign-out form
-    });
+    getLocation(); // Get location and submit sign-in form
+
+    try {
+        const response = await fetch('/signin', {
+            method: 'POST',
+            body: new URLSearchParams(new FormData(document.getElementById('signInForm')))
+        });
+
+        if (response.ok) {
+            // Handle success
+            console.log('Sign-in successful!');
+        } else {
+            // Handle failure
+            console.error('Sign-in failed!');
+        }
+    } catch (error) {
+        console.error('Error occurred:', error);
+    }
+});
 </script>
 </body>
 </html>
