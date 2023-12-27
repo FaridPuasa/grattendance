@@ -52,14 +52,12 @@ console.log('Days difference:', daysDifference); // Output: Days difference: 20
 async function insertUsersAndAttendanceDataToDB() {
     try {
         const users = [
-            { username: 'Ema', email: 'ema.karmila@globex.com.bn'},
             { username: 'Hasbul', phoneNumber: '+6737181101'},
             { username: 'Khai', phoneNumber: 'not applicable'},
             // Add more user objects as needed
         ];
 
         const attendanceData = [
-            { username: 'Ema', location: 'Office', signIn: new Date('2023-12-21T09:00:00Z'), signOut: new Date('2023-12-21T18:00:00Z') },
             { username: 'Hasbul', location: 'Home', signIn: new Date('2023-12-21T10:00:00Z'), signOut: new Date('2023-12-21T17:00:00Z') },
             { username: 'Khai', location: 'Home', signIn: new Date('2023-12-21T10:00:00Z'), signOut: new Date('2023-12-21T17:00:00Z') },
             // Add more attendance records as needed
