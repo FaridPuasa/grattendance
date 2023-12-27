@@ -3,7 +3,6 @@ const bodyParser = require('body-parser');
 const { MongoClient, ObjectId } = require('mongodb');
 const path = require('path');
 const app = express();
-const fetch = require('node-fetch');
 
 const mongodbUri = process.env.MONGODB_URI || 'mongodb+srv://itsupport:GSB110011@cluster0.kkzdiku.mongodb.net/LMS?retryWrites=true&w=majority';
 const client = new MongoClient(mongodbUri, { useNewUrlParser: true, useUnifiedTopology: true });
@@ -202,29 +201,6 @@ app.get('/attendance-log', async (req, res) => {
         res.status(500).send('Error fetching attendance log');
     }
 });
-
-
-// Function to retrieve location name from latitude and longitude
-async function getLocationName(latitude, longitude) {
-    const apiKey = 'AgkWMZlk5ts6xb8cJkzUar2iJMWTexduafRzsyANqeAF2b_PN0D2CZAKo8hfNqkB';
-    const url = `https://dev.virtualearth.net/REST/v1/Locations/${latitude},${longitude}?key=${apiKey}`;
-
-    try {
-        const response = await fetch(url);
-        const data = await response.json();
-
-        if (data && data.resourceSets && data.resourceSets.length > 0) {
-            const location = data.resourceSets[0].resources[0].name;
-            return location;
-        } else {
-            return 'Location not found';
-        }
-    } catch (error) {
-        console.error('Error retrieving location:', error);
-        return 'Error fetching location';
-    }
-}
-
 
 // Attendance recording route
 app.post('/attendance', async (req, res) => {
