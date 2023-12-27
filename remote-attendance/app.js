@@ -95,13 +95,26 @@ async function readAttendanceDataFromDB() {
         } else {
             console.log('Attendance data loaded from MongoDB:', attendanceData);
         }
-
-        return attendanceData;
-    } catch (err) {
-        console.error('Error loading attendance data from MongoDB:', err);
-        throw new Error('Failed to read attendance data from the database');
+     // Sample log for latitude and longitude in the first record (if available)
+    if (attendanceData.length > 0) {
+        const firstRecord = attendanceData[0];
+        if (firstRecord.latitude && firstRecord.longitude) {
+            console.log('Latitude:', firstRecord.latitude);
+            console.log('Longitude:', firstRecord.longitude);
+        }  else {
+            console.log('Latitude or Longitude not found in the first record.');
+        }
+    } else {
+        console.log('No attendance data found in the collection.');
     }
+
+    return attendanceData;
+ } catch (err) {
+     console.error('Error loading attendance data from MongoDB:', err);
+     throw new Error('Failed to read attendance data from the database');
+ }
 }
+
 
 app.use(express.static(path.join(__dirname, 'public')));
 
