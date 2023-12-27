@@ -248,7 +248,6 @@ app.post('/attendance', async (req, res) => {
 
     if (latitude && longitude) {
         try {
-            const attendanceCollection = db.collection('attendanceData');
             const locationName = await getLocationName(latitude, longitude);
 
             await attendanceCollection.insertOne({
