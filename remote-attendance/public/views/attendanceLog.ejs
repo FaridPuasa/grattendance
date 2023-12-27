@@ -9,7 +9,7 @@
     <table border="1">
         <tr>
             <th>Username</th>
-            <th>Location</th>
+            <th>Location Name</th>
             <th>Sign In time</th>
             <th>Sign Out time</th>
             <th>Date</th>
@@ -17,7 +17,7 @@
         <% attendanceData.forEach(entry => { %>
             <tr>
                 <td><%= entry.username %></td>
-                <td><%= entry.location %></td>
+                <td><%= entry.locationName || 'Not available' %></td>
                 <td><%= entry.signIn %></td>
                 <td><%= entry.signOut %></td>
                 <td><%= entry.date %></td>
