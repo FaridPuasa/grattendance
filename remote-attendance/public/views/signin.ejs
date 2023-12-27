@@ -14,12 +14,12 @@
     <div id="map" style="width: 50%; height: 400px;"></div>
 
    <!-- Form for sign-in -->
-   <form action="/signin" method="POST">
+   <form id="signInForm" action="/signin" method="POST">
     <label for="username">Username:</label>
     <input type="text" name="username" required>
     <input type="hidden" id="latitude" name="latitude" value="YOUR_LATITUDE" />
     <input type="hidden" id="longitude" name="longitude" value="YOUR_LONGITUDE" />
-    <button type="submit" id="signInBtn">Sign In</button>
+    <button type="button" id="getLocationAndSubmit()">Sign In</button>
 </form>
 
     <!-- Your JavaScript for Bing Maps integration -->
@@ -39,8 +39,35 @@ function loadMapScenario() {
             document.getElementById('location').value = address;
         }
     
-       // Function to update the map with location and reverse geocode to get the address
-       function updateMapWithLocation(latitude, longitude) {
+
+ // Function to get the user's location
+ function getLocationAndSubmit() {
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(
+                    function (position) {
+                        const latitude = position.coords.latitude;
+                        const longitude = position.coords.longitude;
+
+                        // Set latitude and longitude values in the hidden input fields
+                        document.getElementById('latitude').value = latitude;
+                        document.getElementById('longitude').value = longitude;
+
+                        // Update the map with location and reverse geocode to get the address
+                        updateMapWithLocation(latitude, longitude);
+                    },
+                    function (error) {
+                        // Handle geolocation errors here (e.g., user denies permission)
+                        console.error('Error getting location:', error);
+                        alert('Error getting location. Please try again.');
+                    }
+                );
+            } else {
+                alert('Geolocation is not supported by this browser.');
+            }
+        }
+
+        // Function to update the map with location and reverse geocode to get the address
+        function updateMapWithLocation(latitude, longitude) {
             const userLocation = new Microsoft.Maps.Location(latitude, longitude);
             map.setView({ center: userLocation, zoom: 10 });
 
@@ -69,30 +96,10 @@ function loadMapScenario() {
                 };
                 searchManager.reverseGeocode(reverseGeocodeRequestOptions);
             });
-        
-}
 
-// Function to get the user's location
-function getLocation() {
-        if (navigator.geolocation) {
-            navigator.geolocation.getCurrentPosition(showPosition);
-        } else {
-            alert("Geolocation is not supported by this browser.");
+            // Submit the form with obtained location
+            document.getElementById('signInForm').submit();
         }
-    }
-
-    // Function to display position and submit the form with current location
-    function showPosition(position) {
-        const latitude = position.coords.latitude;
-        const longitude = position.coords.longitude;
-
-        // Set latitude and longitude values in the hidden input fields
-        document.getElementById("latitude").value = latitude;
-        document.getElementById("longitude").value = longitude;
-
-        // Submit the form when location is obtained
-        document.getElementById("signInBtn").click(); // or document.getElementById("signOutBtn").click();
-    }
 
     // Event listeners for sign-in and sign-out buttons
     document.getElementById("signInBtn").addEventListener("click", () => {
