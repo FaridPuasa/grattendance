@@ -74,46 +74,19 @@ function loadMapScenario() {
 
 // Function to get the user's location
 function getLocation() {
-        if (navigator.geolocation) {
-            navigator.geolocation.getCurrentPosition(showPosition);
-        } else {
-            alert("Geolocation is not supported by this browser.");
-        }
+    if (navigator.geolocation) {
+         navigator.geolocation.getCurrentPosition(showPosition);
+     } else {
+         alert("Geolocation is not supported by this browser.");
     }
+}
 
-    // Function to display position and submit the form with current location
-    async function showPosition(position) {
-        const latitude = position.coords.latitude;
-        const longitude = position.coords.longitude;
+// Function to display position and submit the form with current location
+async function showPosition(position) {
+     const latitude = position.coords.latitude;
+     const longitude = position.coords.longitude;
 
-        // Set latitude and longitude values in the hidden input fields
-        document.getElementById("latitude").value = latitude;
-        document.getElementById("longitude").value = longitude;
-
-        try {
-            const response = await fetch('/signin', {
-                method: 'POST',
-                body: new URLSearchParams(new FormData(document.getElementById('signInForm')))
-            });
-
-            if (response.ok) {
-                // Handle success
-                console.log('Sign-in successful!');
-            } else {
-                // Handle failure
-                console.error('Sign-in failed!');
-            }
-        } catch (error) {
-            console.error('Error occurred:', error);
-        }
-    }
-    
-
-    // Event listener for sign-in form submission
-document.getElementById("signInForm").addEventListener("submit", async (event) => {
-    event.preventDefault(); // Prevent default form submission
-
-    getLocation(); // Get location and submit sign-in form
+     updateLocationFields(latitude, longitude, '');
 
     try {
         const response = await fetch('/signin', {
@@ -131,16 +104,12 @@ document.getElementById("signInForm").addEventListener("submit", async (event) =
     } catch (error) {
         console.error('Error occurred:', error);
     }
-});
+}
 
 // Event listeners for sign-in and sign-out buttons
 document.getElementById("signInBtn").addEventListener("click", () => {
     getLocation(); // Get location and submit sign-in form
  });
-
-document.getElementById("signOutBtn").addEventListener("click", () => {
-    getLocation(); // Get location and submit sign-out form
-});
 </script>
 </body>
 </html>
