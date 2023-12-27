@@ -19,7 +19,7 @@
     <input type="text" name="username" required>
     <input type="hidden" id="latitude" name="latitude" value="YOUR_LATITUDE" />
     <input type="hidden" id="longitude" name="longitude" value="YOUR_LONGITUDE" />
-    <button type="submit" id="getLocationAndSubmit()">Sign In</button>
+    <button type="button" onclick="getLocationAndSubmit()">Sign In</button>
 </form>
 
     <!-- Your JavaScript for Bing Maps integration -->
@@ -54,6 +54,9 @@ function loadMapScenario() {
 
                         // Update the map with location and reverse geocode to get the address
                         updateMapWithLocation(latitude, longitude);
+
+                        // Submit the form with obtained location
+                        document.getElementById('signInForm').submit();
                     },
                     function (error) {
                         // Handle geolocation errors here (e.g., user denies permission)
