@@ -258,7 +258,7 @@ const { time } = require('console');
 app.post('/signin', async (req, res) => {
     await connectMongoDB(); // Ensure MongoDB connection before processing sign-in
 
-    const { username, latitude, longitude } = req.body;
+    const { username, location, latitude, longitude } = req.body;
     const currentDate = new Date().toISOString().split('T')[0];
     const currentTime = moment().tz('Asia/Brunei').format('HH:mm:ss'); // Get time in Brunei timezone
 
