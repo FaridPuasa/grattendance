@@ -53,8 +53,8 @@ async function insertUsersAndAttendanceDataToDB() {
     try {
         const users = [
             { username: 'Ema', email: 'ema.karmila@globex.com.bn'},
-            { username: 'Hasbul', email: 'not applicable'},
-            { username: 'Khai', email: 'not applicable'},
+            { username: 'Hasbul', phoneNumber: 'not applicable'},
+            { username: 'Khai', phoneNumber: 'not applicable'},
             // Add more user objects as needed
         ];
 
