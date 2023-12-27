@@ -191,17 +191,32 @@ app.post('/add-attendance', async (req, res) => {
     }
 });
 
+// Route to render the attendance log
 app.get('/attendance-log', async (req, res) => {
     try {
         console.log('Attempting to retrieve attendance data...');
         const attendanceData = await readAttendanceDataFromDB();
 
+        // Fetch location names for each attendance record
+        for (const record of attendanceData) {
+            const latitude = record.latitude;
+            const longitude = record.longitude;
+
+            // Fetch location name using getLocationName function
+            const locationName = await getLocationName(latitude, longitude);
+
+            // Update the attendance record with the location name
+            record.locationName = locationName;
+        }
+
+        // Render the attendance log page with the updated attendanceData
         res.render('attendanceLog', { attendanceData });
     } catch (err) {
         console.error('Error fetching attendance log:', err);
         res.status(500).send('Error fetching attendance log');
     }
 });
+
 
 // Function to retrieve location name from latitude and longitude
 async function getLocationName(latitude, longitude) {
