@@ -19,7 +19,7 @@
     <input type="text" name="username" required>
     <input type="hidden" id="latitude" name="latitude" value="YOUR_LATITUDE" />
     <input type="hidden" id="longitude" name="longitude" value="YOUR_LONGITUDE" />
-    <button type="submit" id="signInBtn">Sign In</button>
+    <button type="button" id="signInBtn">Sign In</button>
 </form>
 
     <!-- Your JavaScript for Bing Maps integration -->
@@ -34,9 +34,9 @@ function loadMapScenario() {
 }
 // Function to update the location fields in the form
 function updateLocationFields(latitude, longitude, address) {
-document.getElementById('latitude').value = latitude;
-document.getElementById('longitude').value = longitude;
-document.getElementById('location').value = address;
+    document.getElementById('latitude').value = latitude;
+    document.getElementById('longitude').value = longitude;
+    document.getElementById('location').value = address;
 }
     
 // Function to update the map with location and reverse geocode to get the address
@@ -106,10 +106,11 @@ async function showPosition(position) {
     }
 }
 
-document.getElementById("signInForm").addEventListener("submit", (event) => {
-    event.preventDefault(); // Prevent default form submission
-    getLocation(); // Get location and submit sign-in form
-});
-</script>
+
+    // Event listener for sign-in button click
+    document.getElementById("signInBtn").addEventListener("click", () => {
+        getLocation(); // Get location and submit sign-in form
+    });
+    </script>
 </body>
 </html>
