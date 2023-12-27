@@ -106,10 +106,6 @@ async function showPosition(position) {
     }
 }
 
-document.getElementById("signInBtn").addEventListener("click", () => {
-    getLocation(); // Get location when the button is clicked
-});
-
 document.getElementById("signInForm").addEventListener("submit", (event) => {
     event.preventDefault(); // Prevent default form submission
     getLocation(); // Get location and submit sign-in form
