@@ -19,6 +19,7 @@
     <input type="text" name="username" required>
     <input type="hidden" id="latitude" name="latitude" value="" />
     <input type="hidden" id="longitude" name="longitude" value="" />
+    <input type="hidden" id="location" name="location" value="" />
     <button type="button" onclick="getLocationAndSubmit()">Sign In</button>
 </form>
 
@@ -50,6 +51,9 @@ function loadMapScenario() {
                         // Set latitude and longitude values in the hidden input fields
                         document.getElementById('latitude').value = latitude;
                         document.getElementById('longitude').value = longitude;
+
+                        // Update the map with location and reverse geocode to get the address
+                        updateMapWithLocation(latitude, longitude);
 
                         // Submit the form with obtained location
                         document.getElementById('signInForm').submit();
