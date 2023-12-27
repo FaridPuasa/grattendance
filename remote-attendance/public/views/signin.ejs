@@ -33,58 +33,74 @@ function loadMapScenario() {
         credentials: 'AgkWMZlk5ts6xb8cJkzUar2iJMWTexduafRzsyANqeAF2b_PN0D2CZAKo8hfNqkB'
     });
 }
-        // Function to update the location fields in the form
-        function updateLocationFields(latitude, longitude, address) {
-            document.getElementById('latitude').value = latitude;
-            document.getElementById('longitude').value = longitude;
-            document.getElementById('location').value = address;
-        }
+
+// Function to update the location fields in the form
+function updateLocationFields(latitude, longitude, address) {
+    document.getElementById('latitude').value = latitude;
+    document.getElementById('longitude').value = longitude;
+    document.getElementById('location').value = address;
+}
     
- // Function to get the user's location
- function getLocationAndSubmit() {
-            if (navigator.geolocation) {
-                navigator.geolocation.getCurrentPosition(
-                    function (position) {
-                        const latitude = position.coords.latitude;
-                        const longitude = position.coords.longitude;
+// Function to get the user's location
+function getLocationAndSubmit() {
+    if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(
+            function (position) {
+                const latitude = position.coords.latitude;
+                const longitude = position.coords.longitude;
 
-                        // Set latitude and longitude values in the hidden input fields
-                        document.getElementById('latitude').value = latitude;
-                        document.getElementById('longitude').value = longitude;
+                // Set latitude and longitude values in the hidden input fields
+                document.getElementById('latitude').value = latitude;
+                document.getElementById('longitude').value = longitude;
 
-                       // Call function to perform reverse geocoding using Google Maps API
-                       getAddressFromLatLng(latitude, longitude);
+                // Update the map with location and reverse geocode to get the address
+                updateMapWithLocation(latitude, longitude);
 
-                        // Submit the form with obtained location
-                        document.getElementById('signInForm').submit();
-                    },
-                    function (error) {
-                        // Handle geolocation errors here (e.g., user denies permission)
-                        console.error('Error getting location:', error);
-                        alert('Error getting location. Please try again.');
-                    }
-                );
-            } else {
-                alert('Geolocation is not supported by this browser.');
+                // Submit the form with obtained location
+                document.getElementById('signInForm').submit();
+            },
+            function (error) {
+                // Handle geolocation errors here (e.g., user denies permission)
+                console.error('Error getting location:', error);
+                alert('Error getting location. Please try again.');
             }
-        }
-// Function to perform reverse geocoding using Google Maps Geocoding API
-function getAddressFromLatLng(latitude, longitude) {
-    var latlng = new google.maps.LatLng(latitude, longitude);
-    var geocoder = new google.maps.Geocoder();
+        );
+    } else {
+        alert('Geolocation is not supported by this browser.');
+    }
+}
 
-    geocoder.geocode({ 'latLng': latlng }, function (results, status) {
-        if (status === google.maps.GeocoderStatus.OK) {
-            if (results[0]) {
-                const address = results[0].formatted_address;
-                updateLocationFields(latitude, longitude, address); // Update location fields with the retrieved address
-            } else {
-                updateLocationFields(latitude, longitude, 'Location not found'); // Handle case where location is not found
+// Function to update the map with location and reverse geocode to get the address
+function updateMapWithLocation(latitude, longitude) {
+    const userLocation = new Microsoft.Maps.Location(latitude, longitude);
+    map.setView({ center: userLocation, zoom: 10 });
+
+    // Example marker at the user's location
+    const pin = new Microsoft.Maps.Pushpin(userLocation);
+    map.entities.push(pin);
+
+    // Reverse geocode to get the address based on latitude and longitude
+    Microsoft.Maps.loadModule('Microsoft.Maps.Search', function () {
+        const searchManager = new Microsoft.Maps.Search.SearchManager(map);
+        const reverseGeocodeRequestOptions = {
+            location: userLocation,
+            callback: function (result) {
+                if (result && result.results && result.results.length > 0) {
+                    const address = result.results[0].address.formattedAddress;
+                    updateLocationFields(latitude, longitude, address); // Update location fields with the retrieved address
+                } else {
+                    updateLocationFields(latitude, longitude, 'Location not found'); // Handle case where location is not found
+                }
+            },
+            errorCallback: function (e) {
+                // Display error details in the console
+                console.error('Error during reverse geocoding:', e);
+                updateLocationFields(latitude, longitude, 'Error fetching location'); // Handle error case
             }
-        } else {
-            updateLocationFields(latitude, longitude, 'Error fetching location'); // Handle error case
-        }
+        };
+        searchManager.reverseGeocode(reverseGeocodeRequestOptions);
     });
+
 }
     </script>
 </body>
