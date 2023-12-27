@@ -19,7 +19,7 @@
     <input type="text" name="username" required>
     <input type="hidden" id="latitude" name="latitude" value="YOUR_LATITUDE" />
     <input type="hidden" id="longitude" name="longitude" value="YOUR_LONGITUDE" />
-    <button type="submit" id="signInBtn">Sign In</button>
+    <button type="button" id="signInBtn">Sign In</button>
 </form>
 
     <!-- Your JavaScript for Bing Maps integration -->
@@ -106,10 +106,14 @@ async function showPosition(position) {
     }
 }
 
-// Event listeners for sign-in and sign-out buttons
 document.getElementById("signInBtn").addEventListener("click", () => {
+    getLocation(); // Get location when the button is clicked
+});
+
+document.getElementById("signInForm").addEventListener("submit", (event) => {
+    event.preventDefault(); // Prevent default form submission
     getLocation(); // Get location and submit sign-in form
- });
+});
 </script>
 </body>
 </html>
