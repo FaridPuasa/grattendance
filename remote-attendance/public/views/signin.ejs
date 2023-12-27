@@ -82,7 +82,7 @@ function getLocation() {
     }
 
     // Function to display position and submit the form with current location
-    function showPosition(position) {
+    async function showPosition(position) {
         const latitude = position.coords.latitude;
         const longitude = position.coords.longitude;
 
@@ -90,9 +90,27 @@ function getLocation() {
         document.getElementById("latitude").value = latitude;
         document.getElementById("longitude").value = longitude;
 
-        // Submit the form when location is obtained
-        document.getElementById("signInBtn").click(); // or document.getElementById("signOutBtn").click();
+        try {
+            const response = await fetch('/signin', {
+                method: 'POST',
+                body: new URLSearchParams(new FormData(document.getElementById('signInForm')))
+            });
+
+            if (response.ok) {
+                // Handle success
+                console.log('Sign-in successful!');
+            } else {
+                // Handle failure
+                console.error('Sign-in failed!');
+            }
+        } catch (error) {
+            console.error('Error occurred:', error);
+        }
     }
+
+    // Submit the form when location is obtained
+    document.getElementById("signInBtn").click(); // or document.getElementById("signOutBtn").click();
+    
 
     // Event listener for sign-in form submission
 document.getElementById("signInForm").addEventListener("submit", async (event) => {
