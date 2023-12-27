@@ -52,8 +52,8 @@ function loadMapScenario() {
                         document.getElementById('latitude').value = latitude;
                         document.getElementById('longitude').value = longitude;
 
-                        // Update the map with location and reverse geocode to get the address
-                        updateMapWithLocation(latitude, longitude);
+                       // Call function to perform reverse geocoding using Google Maps API
+                       getAddressFromLatLng(latitude, longitude);
 
                         // Submit the form with obtained location
                         document.getElementById('signInForm').submit();
@@ -68,39 +68,24 @@ function loadMapScenario() {
                 alert('Geolocation is not supported by this browser.');
             }
         }
+// Function to perform reverse geocoding using Google Maps Geocoding API
+function getAddressFromLatLng(latitude, longitude) {
+    var latlng = new google.maps.LatLng(latitude, longitude);
+    var geocoder = new google.maps.Geocoder();
 
-        // Function to update the map with location and reverse geocode to get the address
-        function updateMapWithLocation(latitude, longitude) {
-            const userLocation = new Microsoft.Maps.Location(latitude, longitude);
-            map.setView({ center: userLocation, zoom: 10 });
-
-            // Example marker at the user's location
-            const pin = new Microsoft.Maps.Pushpin(userLocation);
-            map.entities.push(pin);
-
-            // Reverse geocode to get the address based on latitude and longitude
-            Microsoft.Maps.loadModule('Microsoft.Maps.Search', function () {
-                const searchManager = new Microsoft.Maps.Search.SearchManager(map);
-                const reverseGeocodeRequestOptions = {
-                    location: userLocation,
-                    callback: function (result) {
-                        if (result && result.results && result.results.length > 0) {
-                            const address = result.results[0].address.formattedAddress;
-                            updateLocationFields(latitude, longitude, address); // Update location fields with the retrieved address
-                        } else {
-                            updateLocationFields(latitude, longitude, 'Location not found'); // Handle case where location is not found
-                        }
-                    },
-                    errorCallback: function (e) {
-                        // Display error details in the console
-                        console.error('Error during reverse geocoding:', e);
-                        updateLocationFields(latitude, longitude, 'Error fetching location'); // Handle error case
-                    }
-                };
-                searchManager.reverseGeocode(reverseGeocodeRequestOptions);
-            });
-
+    geocoder.geocode({ 'latLng': latlng }, function (results, status) {
+        if (status === google.maps.GeocoderStatus.OK) {
+            if (results[0]) {
+                const address = results[0].formatted_address;
+                updateLocationFields(latitude, longitude, address); // Update location fields with the retrieved address
+            } else {
+                updateLocationFields(latitude, longitude, 'Location not found'); // Handle case where location is not found
+            }
+        } else {
+            updateLocationFields(latitude, longitude, 'Error fetching location'); // Handle error case
         }
+    });
+}
     </script>
 </body>
 </html>
