@@ -51,9 +51,9 @@ console.log('Days difference:', daysDifference); // Output: Days difference: 20
 async function insertUsersAndAttendanceDataToDB() {
     try {
         const users = [
-            { name: 'Ema', email: 'ema.karmila@globex.com.bn'},
-            { name: 'Hasbul', email: 'not applicable'},
-            { name: 'Khai', email: 'not applicable'},
+            { username: 'Ema', email: 'ema.karmila@globex.com.bn'},
+            { username: 'Hasbul', email: 'not applicable'},
+            { username: 'Khai', email: 'not applicable'},
             // Add more user objects as needed
         ];
 
