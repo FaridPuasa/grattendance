@@ -205,7 +205,7 @@ app.get('/attendance-log', async (req, res) => {
 
 // Function to retrieve location name from latitude and longitude
 async function getLocationName(latitude, longitude) {
-    const apiKey = 'YOUR_BING_MAPS_API_KEY';
+    const apiKey = 'AgkWMZlk5ts6xb8cJkzUar2iJMWTexduafRzsyANqeAF2b_PN0D2CZAKo8hfNqkB';
     const url = `https://dev.virtualearth.net/REST/v1/Locations/${latitude},${longitude}?key=${apiKey}`;
 
     try {
