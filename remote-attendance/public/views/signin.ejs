@@ -39,7 +39,6 @@ function loadMapScenario() {
             document.getElementById('location').value = address;
         }
     
-
  // Function to get the user's location
  function getLocationAndSubmit() {
             if (navigator.geolocation) {
@@ -51,9 +50,6 @@ function loadMapScenario() {
                         // Set latitude and longitude values in the hidden input fields
                         document.getElementById('latitude').value = latitude;
                         document.getElementById('longitude').value = longitude;
-
-                        // Update the map with location and reverse geocode to get the address
-                        updateMapWithLocation(latitude, longitude);
 
                         // Submit the form with obtained location
                         document.getElementById('signInForm').submit();
