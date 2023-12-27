@@ -118,6 +118,15 @@ document.getElementById("signInForm").addEventListener("submit", async (event) =
         console.error('Error occurred:', error);
     }
 });
+
+// Event listeners for sign-in and sign-out buttons
+document.getElementById("signInBtn").addEventListener("click", () => {
+    getLocation(); // Get location and submit sign-in form
+ });
+
+document.getElementById("signOutBtn").addEventListener("click", () => {
+    getLocation(); // Get location and submit sign-out form
+});
 </script>
 </body>
 </html>
