@@ -32,43 +32,43 @@ function loadMapScenario() {
         credentials: 'AgkWMZlk5ts6xb8cJkzUar2iJMWTexduafRzsyANqeAF2b_PN0D2CZAKo8hfNqkB'
     });
 }
-        // Function to update the location fields in the form
-        function updateLocationFields(latitude, longitude, address) {
-            document.getElementById('latitude').value = latitude;
-            document.getElementById('longitude').value = longitude;
-            document.getElementById('location').value = address;
-        }
+// Function to update the location fields in the form
+function updateLocationFields(latitude, longitude, address) {
+document.getElementById('latitude').value = latitude;
+document.getElementById('longitude').value = longitude;
+document.getElementById('location').value = address;
+}
     
-       // Function to update the map with location and reverse geocode to get the address
-       function updateMapWithLocation(latitude, longitude) {
-            const userLocation = new Microsoft.Maps.Location(latitude, longitude);
-            map.setView({ center: userLocation, zoom: 10 });
+// Function to update the map with location and reverse geocode to get the address
+function updateMapWithLocation(latitude, longitude) {
+    const userLocation = new Microsoft.Maps.Location(latitude, longitude);
+    map.setView({ center: userLocation, zoom: 10 });
 
-            // Example marker at the user's location
-            const pin = new Microsoft.Maps.Pushpin(userLocation);
-            map.entities.push(pin);
+    // Example marker at the user's location
+    const pin = new Microsoft.Maps.Pushpin(userLocation);
+    map.entities.push(pin);
 
-            // Reverse geocode to get the address based on latitude and longitude
-            Microsoft.Maps.loadModule('Microsoft.Maps.Search', function () {
-                const searchManager = new Microsoft.Maps.Search.SearchManager(map);
-                const reverseGeocodeRequestOptions = {
-                    location: userLocation,
-                    callback: function (result) {
-                        if (result && result.results && result.results.length > 0) {
-                            const address = result.results[0].address.formattedAddress;
-                            updateLocationFields(latitude, longitude, address); // Update location fields with the retrieved address
-                        } else {
-                            updateLocationFields(latitude, longitude, 'Location not found'); // Handle case where location is not found
-                        }
-                    },
-                    errorCallback: function (e) {
-                        // Display error details in the console
-                        console.error('Error during reverse geocoding:', e);
-                        updateLocationFields(latitude, longitude, 'Error fetching location'); // Handle error case
-                    }
-                };
-                searchManager.reverseGeocode(reverseGeocodeRequestOptions);
-            });
+    // Reverse geocode to get the address based on latitude and longitude
+    Microsoft.Maps.loadModule('Microsoft.Maps.Search', function () {
+        const searchManager = new Microsoft.Maps.Search.SearchManager(map);
+        const reverseGeocodeRequestOptions = {
+            location: userLocation,
+            callback: function (result) {
+                if (result && result.results && result.results.length > 0) {
+                    const address = result.results[0].address.formattedAddress;
+                    updateLocationFields(latitude, longitude, address); // Update location fields with the retrieved address
+                } else {
+                    updateLocationFields(latitude, longitude, 'Location not found'); // Handle case where location is not found
+                }
+            },
+            errorCallback: function (e) {
+                // Display error details in the console
+                console.error('Error during reverse geocoding:', e);
+                updateLocationFields(latitude, longitude, 'Error fetching location'); // Handle error case
+            }
+        };
+        searchManager.reverseGeocode(reverseGeocodeRequestOptions);
+    });
         
 }
 
@@ -105,14 +105,6 @@ async function showPosition(position) {
         console.error('Error occurred:', error);
     }
 }
-
-// Submit the form when location is obtained
-document.getElementById("signInBtn").click(); // or document.getElementById("signOutBtn").click();
-
-// Event listeners for sign-in and sign-out buttons
-document.getElementById("signInBtn").addEventListener("click", () => {
-    getLocation(); // Get location and submit sign-in form
-});
 
 document.getElementById("signInForm").addEventListener("submit", (event) => {
     event.preventDefault(); // Prevent default form submission
