@@ -3,6 +3,7 @@ const bodyParser = require('body-parser');
 const { MongoClient, ObjectId } = require('mongodb');
 const path = require('path');
 const app = express();
+const axios = require('axios');
 
 const mongodbUri = process.env.MONGODB_URI || 'mongodb+srv://itsupport:GSB110011@cluster0.kkzdiku.mongodb.net/LMS?retryWrites=true&w=majority';
 const client = new MongoClient(mongodbUri, { useNewUrlParser: true, useUnifiedTopology: true });
@@ -202,6 +203,27 @@ app.get('/attendance-log', async (req, res) => {
     }
 });
 
+// Function to retrieve location name from latitude and longitude
+async function getLocationName(latitude, longitude) {
+    const apiKey = 'YOUR_BING_MAPS_API_KEY';
+    const url = `https://dev.virtualearth.net/REST/v1/Locations/${latitude},${longitude}?key=${apiKey}`;
+
+    try {
+        const response = await axios.get(url);
+        const data = response.data;
+
+        if (data && data.resourceSets && data.resourceSets.length > 0) {
+            const location = data.resourceSets[0].resources[0].name;
+            return location;
+        } else {
+            return 'Location not found';
+        }
+    } catch (error) {
+        console.error('Error retrieving location:', error);
+        return 'Error fetching location';
+    }
+}
+
 // Attendance recording route
 app.post('/attendance', async (req, res) => {
     const { latitude, longitude } = req.body;
@@ -212,6 +234,7 @@ app.post('/attendance', async (req, res) => {
     if (latitude && longitude) {
         try {
             const attendanceCollection = db.collection('attendanceData');
+            const locationName = await getLocationName(latitude, longitude);
 
             await attendanceCollection.insertOne({
                 location: { type: 'Point', coordinates: [parseFloat(longitude), parseFloat(latitude)] },
