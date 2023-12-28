@@ -112,51 +112,11 @@ async function readAttendanceDataFromDB() {
             console.log('Attendance data loaded from MongoDB:', attendanceData);
         }
 
-         // Fetch location names for each attendance record
-         for (const record of attendanceData) {
-            const latitude = parseFloat(record.latitude);
-            const longitude = parseFloat(record.longitude);
-
-            if (!isNaN(latitude) && !isNaN(longitude)) {
-                // Fetch location name using getLocationName function
-                const locationName = await getLocationName(latitude, longitude);
-
-                // Update the attendance record with the location name
-                record.locationName = locationName;
-
-                // Assuming attendanceCollection is your MongoDB collection
-                // Update the MongoDB document with the new location name
-               await attendanceCollection.updateOne(
-                  { "_id": ObjectId("658d96c2687d441f5ec9333d") }, // Replace with your actual document ID
-                  { $set: { "location": locationName } },
-                  { "_id": ObjectId("658d06ccffd92647f54e69e1") }, // Replace with your actual document ID
-                  { $set: { "location": locationName } }
-               );
-            } else {
-                // Handle null or undefined values for latitude or longitude
-                console.log('Latitude or longitude is null or undefined for record:', record);
-                record.locationName = 'Location data unavailable';
-            }
-        }
-        
-     // Sample log for latitude and longitude in the first record (if available)
-    if (attendanceData.length > 0) {
-        const firstRecord = attendanceData[0];
-        if (firstRecord.latitude && firstRecord.longitude) {
-            console.log('Latitude:', firstRecord.latitude);
-            console.log('Longitude:', firstRecord.longitude);
-        }  else {
-            console.log('Latitude or Longitude not found in the first record.');
-        }
-    } else {
-        console.log('No attendance data found in the collection.');
+        return attendanceData;
+    } catch (err) {
+        console.error('Error loading attendance data from MongoDB:', err);
+        throw new Error('Failed to read attendance data from the database');
     }
-
-    return attendanceData;
- } catch (err) {
-     console.error('Error loading attendance data from MongoDB:', err);
-     throw new Error('Failed to read attendance data from the database');
- }
 }
 
 
