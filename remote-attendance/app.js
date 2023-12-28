@@ -56,7 +56,7 @@ async function insertUsersAndAttendanceDataToDB() {
             { username: 'Khai', phoneNumber: 'not applicable'}
             
         ];
-        
+
         const attendanceData = [
             {
                 username: 'Hasbul',
@@ -82,15 +82,20 @@ async function insertUsersAndAttendanceDataToDB() {
 
         const attendanceDataWithLocations = await Promise.all(locationPromises);
 
+        console.log('Attendance Data with Locations:', attendanceDataWithLocations);
+
         const resultAttendance = await attendanceCollection.insertMany(attendanceDataWithLocations);
         console.log(`${resultAttendance.insertedCount} attendance data inserted`);
+
+        // Log the attendance data with location information
+        const insertedAttendanceData = await attendanceCollection.find({}).toArray();
+        console.log('Inserted Attendance Data:', insertedAttendanceData);
+
     } catch (err) {
         console.error('Error inserting attendance data:', err);
         throw new Error('Failed to insert attendance data to the database');
     }
 }
-
-
 
 // Read attendance data from the database
 async function readAttendanceDataFromDB() {
@@ -276,25 +281,6 @@ async function getLocationName(latitude, longitude) {
     }
 }
 
-// Define a test endpoint to debug getLocationName function
-app.get('/test-location-name', async (req, res) => {
-    // Test latitude and longitude values (replace with your test values)
-    const testLatitude = 40.7128; // Example latitude
-    const testLongitude = -74.0060; // Example longitude
-
-    try {
-        // Call getLocationName with test latitude and longitude
-        const locationName = await getLocationName(testLatitude, testLongitude);
-
-        // Log or send the location name in the response for debugging purposes
-        console.log('Location Name:', locationName);
-        res.send(`Location Name: ${locationName}`);
-    } catch (error) {
-        console.error('Error retrieving location name:', error);
-        res.status(500).send('Error retrieving location name');
-    }
-});
-
 
 // Attendance recording route
 app.post('/attendance', async (req, res) => {
@@ -456,6 +442,25 @@ app.get('/signin-success', (req, res) => {
 // Route to handle successful sign-out
 app.get('/signout-success', (req, res) => {
     res.send('Sign-Out successful!'); // You can customize this response or render a success page here
+});
+
+// Define a test endpoint to debug getLocationName function
+app.get('/test-location-name', async (req, res) => {
+    // Test latitude and longitude values (replace with your test values)
+    const testLatitude = 40.7128; // Example latitude
+    const testLongitude = -74.0060; // Example longitude
+
+    try {
+        // Call getLocationName with test latitude and longitude
+        const locationName = await getLocationName(testLatitude, testLongitude);
+
+        // Log or send the location name in the response for debugging purposes
+        console.log('Location Name:', locationName);
+        res.send(`Location Name: ${locationName}`);
+    } catch (error) {
+        console.error('Error retrieving location name:', error);
+        res.status(500).send('Error retrieving location name');
+    }
 });
 
 // Start the server
