@@ -444,24 +444,18 @@ app.get('/signout-success', (req, res) => {
     res.send('Sign-Out successful!'); // You can customize this response or render a success page here
 });
 
-// Define a test endpoint to debug getLocationName function
-app.get('/test-location-name', async (req, res) => {
-    // Test latitude and longitude values (replace with your test values)
-    const testLatitude = 40.7128; // Example latitude
-    const testLongitude = -74.0060; // Example longitude
+// Test getLocationName function with sample latitude and longitude
+const testLatitude = 1.234567; // Replace with actual latitude
+const testLongitude = 123.456789; // Replace with actual longitude
 
-    try {
-        // Call getLocationName with test latitude and longitude
-        const locationName = await getLocationName(testLatitude, testLongitude);
+getLocationName(testLatitude, testLongitude)
+  .then(locationName => {
+    console.log('Location Name:', locationName);
+  })
+  .catch(error => {
+    console.error('Error retrieving location name:', error);
+  });
 
-        // Log or send the location name in the response for debugging purposes
-        console.log('Location Name:', locationName);
-        res.send(`Location Name: ${locationName}`);
-    } catch (error) {
-        console.error('Error retrieving location name:', error);
-        res.status(500).send('Error retrieving location name');
-    }
-});
 
 // Start the server
 const PORT = process.env.PORT || 3000;
