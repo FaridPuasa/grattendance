@@ -81,11 +81,6 @@ async function insertUsersAndAttendanceDataToDB() {
             return { ...data, locationName };
         });
 
-        const attendanceDataWithLocations = await Promise.all(locationPromises);
-
-        const resultUsers = await usersCollection.insertMany(users);
-        console.log(`${resultUsers.insertedCount} users inserted`);
-
         const resultAttendance = await attendanceCollection.insertMany(attendanceData);
         console.log(`${resultAttendance.insertedCount} attendance data inserted`);
     } catch (err) {
