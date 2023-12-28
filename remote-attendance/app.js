@@ -53,14 +53,14 @@ async function insertUsersAndAttendanceDataToDB() {
     try {
         const users = [
             { username: 'Hasbul', phoneNumber: '+6737181101'},
-            { username: 'Khai', phoneNumber: 'not applicable'},
-            // Add more user objects as needed
+            { username: 'Khai', phoneNumber: 'not applicable'}
+            
         ];
 
         const attendanceData = [
             { username: 'Hasbul', location: 'Home', signIn: new Date('2023-12-21T10:00:00Z'), signOut: new Date('2023-12-21T17:00:00Z') },
-            { username: 'Khai', location: 'Home', signIn: new Date('2023-12-21T10:00:00Z'), signOut: new Date('2023-12-21T17:00:00Z') },
-            // Add more attendance records as needed
+            { username: 'Khai', location: 'Home', signIn: new Date('2023-12-21T10:00:00Z'), signOut: new Date('2023-12-21T17:00:00Z') }
+
         ];
 
         const database = client.db('LMS');
