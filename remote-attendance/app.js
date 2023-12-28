@@ -49,7 +49,6 @@ console.log('Days difference:', daysDifference); // Output: Days difference: 20
 async function insertUsersAndAttendanceDataToDB() {
     try {
         const database = client.db('LMS');
-        const usersCollection = database.collection('users');
         const attendanceCollection = database.collection('attendanceData');
 
         const users = [
@@ -57,22 +56,22 @@ async function insertUsersAndAttendanceDataToDB() {
             { username: 'Khai', phoneNumber: 'not applicable'}
             
         ];
-
-        for (const user of users) {
-            const existingUser = await usersCollection.findOne({ username: user.username });
-
-            if (!existingUser) {
-                await usersCollection.insertOne(user);
-                console.log(`Added user: ${user.username}`);
-            } else {
-                console.log(`User ${user.username} already exists in the database`);
-            }
-        }
-
+        
         const attendanceData = [
-            { username: 'Hasbul', signIn: new Date('2023-12-21T10:00:00Z'), signOut: new Date('2023-12-21T17:00:00Z'),  latitude: 1.234567, longitude: 123.456789 },
-            { username: 'Khai', signIn: new Date('2023-12-21T10:00:00Z'), signOut: new Date('2023-12-21T17:00:00Z'), latitude: 2.345678, longitude: 234.567890 }
-
+            {
+                username: 'Hasbul',
+                signIn: new Date('2023-12-21T10:00:00Z'),
+                signOut: new Date('2023-12-21T17:00:00Z'),
+                latitude: 1.234567,
+                longitude: 123.456789
+            },
+            {
+                username: 'Khai',
+                signIn: new Date('2023-12-21T10:00:00Z'),
+                signOut: new Date('2023-12-21T17:00:00Z'),
+                latitude: 2.345678,
+                longitude: 234.567890
+            }
         ];
 
         const locationPromises = attendanceData.map(async (data) => {
@@ -81,13 +80,16 @@ async function insertUsersAndAttendanceDataToDB() {
             return { ...data, locationName };
         });
 
-        const resultAttendance = await attendanceCollection.insertMany(attendanceData);
+        const attendanceDataWithLocations = await Promise.all(locationPromises);
+
+        const resultAttendance = await attendanceCollection.insertMany(attendanceDataWithLocations);
         console.log(`${resultAttendance.insertedCount} attendance data inserted`);
     } catch (err) {
-        console.error('Error inserting users and attendance data:', err);
-        throw new Error('Failed to insert data to the database');
+        console.error('Error inserting attendance data:', err);
+        throw new Error('Failed to insert attendance data to the database');
     }
 }
+
 
 
 // Read attendance data from the database
