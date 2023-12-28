@@ -269,6 +269,8 @@ async function getLocationName(latitude, longitude) {
         const response = await axios.get(url);
         const data = response.data;
 
+        console.log('Response from API:', data); // Log the response data
+
         if (data && data.resourceSets && data.resourceSets.length > 0) {
             const location = data.resourceSets[0].resources[0].name;
             return location;
