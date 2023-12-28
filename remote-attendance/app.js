@@ -127,9 +127,9 @@ async function readAttendanceDataFromDB() {
                 // Assuming attendanceCollection is your MongoDB collection
                 // Update the MongoDB document with the new location name
                await attendanceCollection.updateOne(
-                  { "_id": ObjectId("658d96c2687d441f5ec9333d") }, // Replace with your actual document ID
+                  { "username": username("Hasbul") }, // Replace with your actual document ID
                   { $set: { "location": locationName } },
-                  { "_id": ObjectId("658d06ccffd92647f54e69e1") }, // Replace with your actual document ID
+                  { "username": username("Khai") }, // Replace with your actual document ID
                   { $set: { "location": locationName } }
                );
             } else {
