@@ -65,6 +65,18 @@ async function insertUsersAndAttendanceDataToDB() {
 
         const database = client.db('LMS');
         const usersCollection = database.collection('users');
+
+        for (const user of users) {
+            const existingUser = await usersCollection.findOne({ username: user.username });
+
+            if (!existingUser) {
+                await usersCollection.insertOne(user);
+                console.log(`Added user: ${user.username}`);
+            } else {
+                console.log(`User ${user.username} already exists in the database`);
+            }
+        }
+
         const attendanceCollection = database.collection('attendanceData');
 
         const resultUsers = await usersCollection.insertMany(users);
