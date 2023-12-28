@@ -65,6 +65,7 @@ async function insertUsersAndAttendanceDataToDB() {
 
         const database = client.db('LMS');
         const usersCollection = database.collection('users');
+        const attendanceCollection = database.collection('attendanceData');
 
         for (const user of users) {
             const existingUser = await usersCollection.findOne({ username: user.username });
@@ -76,8 +77,6 @@ async function insertUsersAndAttendanceDataToDB() {
                 console.log(`User ${user.username} already exists in the database`);
             }
         }
-
-        const attendanceCollection = database.collection('attendanceData');
 
         const resultUsers = await usersCollection.insertMany(users);
         console.log(`${resultUsers.insertedCount} users inserted`);
@@ -192,27 +191,6 @@ app.get('/', async (req, res) => {
     }
 });
 
-// Record attendance
-app.post('/add-attendance', async (req, res) => {
-    const { username, location, signIn, signOut, date } = req.body;
-
-    try {
-        const attendanceCollection = db.collection('attendanceData');
-
-        await attendanceCollection.insertOne({
-            username,
-            location,
-            signIn,
-            signOut,
-            date
-        });
-
-        res.redirect('/map'); // Redirect to the map page or another appropriate location
-    } catch (err) {
-        console.error('Error adding attendance:', err);
-        res.status(500).send('Error adding attendance');
-    }
-});
 
 // Route to render the attendance log
 app.get('/attendance-log', async (req, res) => {
