@@ -48,21 +48,15 @@ console.log('Days difference:', daysDifference); // Output: Days difference: 20
 
 async function insertUsersAndAttendanceDataToDB() {
     try {
+        const database = client.db('LMS');
+        const usersCollection = database.collection('users');
+        const attendanceCollection = database.collection('attendanceData');
+
         const users = [
             { username: 'Hasbul', phoneNumber: '+6737181101'},
             { username: 'Khai', phoneNumber: 'not applicable'}
             
         ];
-
-        const attendanceData = [
-            { username: 'Hasbul', signIn: new Date('2023-12-21T10:00:00Z'), signOut: new Date('2023-12-21T17:00:00Z'),  latitude: 1.234567, longitude: 123.456789 },
-            { username: 'Khai', signIn: new Date('2023-12-21T10:00:00Z'), signOut: new Date('2023-12-21T17:00:00Z'), latitude: 2.345678, longitude: 234.567890 }
-
-        ];
-
-        const database = client.db('LMS');
-        const usersCollection = database.collection('users');
-        const attendanceCollection = database.collection('attendanceData');
 
         for (const user of users) {
             const existingUser = await usersCollection.findOne({ username: user.username });
@@ -74,6 +68,12 @@ async function insertUsersAndAttendanceDataToDB() {
                 console.log(`User ${user.username} already exists in the database`);
             }
         }
+
+        const attendanceData = [
+            { username: 'Hasbul', signIn: new Date('2023-12-21T10:00:00Z'), signOut: new Date('2023-12-21T17:00:00Z'),  latitude: 1.234567, longitude: 123.456789 },
+            { username: 'Khai', signIn: new Date('2023-12-21T10:00:00Z'), signOut: new Date('2023-12-21T17:00:00Z'), latitude: 2.345678, longitude: 234.567890 }
+
+        ];
 
         const locationPromises = attendanceData.map(async (data) => {
             const { latitude, longitude } = data;
