@@ -109,6 +109,25 @@ async function readAttendanceDataFromDB() {
         } else {
             console.log('Attendance data loaded from MongoDB:', attendanceData);
         }
+
+         // Fetch location names for each attendance record
+         for (const record of attendanceData) {
+            const latitude = parseFloat(record.latitude);
+            const longitude = parseFloat(record.longitude);
+
+            if (!isNaN(latitude) && !isNaN(longitude)) {
+                // Fetch location name using getLocationName function
+                const locationName = await getLocationName(latitude, longitude);
+
+                // Update the attendance record with the location name
+                record.locationName = locationName;
+            } else {
+                // Handle null or undefined values for latitude or longitude
+                console.log('Latitude or longitude is null or undefined for record:', record);
+                record.locationName = 'Location data unavailable';
+            }
+        }
+        
      // Sample log for latitude and longitude in the first record (if available)
     if (attendanceData.length > 0) {
         const firstRecord = attendanceData[0];
