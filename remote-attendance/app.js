@@ -262,6 +262,11 @@ app.get('/attendance-log', async (req, res) => {
 
 // Function to retrieve location name from latitude and longitude
 async function getLocationName(latitude, longitude) {
+    // Check if latitude or longitude is undefined or not numeric
+    if (latitude === undefined || longitude === undefined || isNaN(latitude) || isNaN(longitude)) {
+        console.error('Invalid latitude or longitude:', latitude, longitude);
+        return 'Invalid coordinates';
+    }
     const apiKey = 'AgkWMZlk5ts6xb8cJkzUar2iJMWTexduafRzsyANqeAF2b_PN0D2CZAKo8hfNqkB';
     const url = `https://dev.virtualearth.net/REST/v1/Locations/${latitude},${longitude}?key=${apiKey}`;
 
