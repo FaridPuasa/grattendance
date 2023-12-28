@@ -255,7 +255,11 @@ app.post('/attendance', async (req, res) => {
     const currentDate = new Date().toISOString().split('T')[0];
     const currentTime = new Date().toLocaleTimeString();
 
-    if (latitude && longitude) {
+ // Validate latitude and longitude
+ const isValidLatitude = isValidCoordinate(latitude);
+ const isValidLongitude = isValidCoordinate(longitude);
+
+    if (isValidLatitude && isValidLongitude) {
         try {
             const locationName = await getLocationName(latitude, longitude);
 
