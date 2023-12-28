@@ -3,26 +3,42 @@
 <html>
 <head>
     <title>Attendance Log</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
 <body>
-    <h1>Attendance Log</h1>
-    <table border="1">
-        <tr>
-            <th>Username</th>
-            <th>Location Name</th>
-            <th>Sign In time</th>
-            <th>Sign Out time</th>
-            <th>Date</th>
-        </tr>
-        <% attendanceData.forEach(entry => { %>
-            <tr>
-                <td><%= entry.username %></td>
-                <td><%= entry.locationName || 'Not found' %></td>
-                <td><%= entry.signIn %></td>
-                <td><%= entry.signOut %></td>
-                <td><%= entry.date %></td>
-            </tr>
-        <% }); %>
-    </table>
+    <div class="container">
+        <h1>Attendance Log</h1>
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Username</th>
+                    <th>Location Name</th>
+                    <th>Sign In time</th>
+                    <th>Sign Out time</th>
+                    <th>Date</th>
+                </tr>
+            </thead>
+            <tbody>
+                <% attendanceData.forEach(entry => { %>
+                    <tr>
+                        <td><%= entry.username %></td>
+                        <td><%= entry.locationName || 'Not found' %></td>
+                        <td><%= entry.signIn %></td>
+                        <td><%= entry.signOut %></td>
+                        <td><%= entry.date %></td>
+                    </tr>
+                <% }); %>
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Bootstrap JavaScript (Optional: Only if you require Bootstrap JS functionality) -->
+    <!-- Make sure to include jQuery and Popper.js before Bootstrap's JavaScript -->
+    <!-- Example CDN URLs for jQuery and Popper.js -->
+    <!-- <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script> -->
+    <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/2.11.6/umd/popper.min.js"></script> -->
+    <!-- Bootstrap JavaScript -->
+    <!-- <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.min.js"></script> -->
 </body>
 </html>
