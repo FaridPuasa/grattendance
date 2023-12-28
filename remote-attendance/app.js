@@ -191,6 +191,17 @@ app.get('/', async (req, res) => {
     }
 });
 
+// Route to insert users and attendance data
+app.post('/insert-data', async (req, res) => {
+    try {
+        await connectMongoDB(); // Connect to MongoDB before inserting data
+        await insertUsersAndAttendanceDataToDB(); // Insert users and attendance data
+        res.status(200).send('Data insertion successful');
+    } catch (err) {
+        console.error('Error inserting data:', err);
+        res.status(500).send('Error inserting data');
+    }
+});
 
 // Route to render the attendance log
 app.get('/attendance-log', async (req, res) => {
