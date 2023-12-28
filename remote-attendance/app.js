@@ -16,9 +16,6 @@ async function connectMongoDB() {
         const database = client.db('LMS');
         db = database;
         
-        // After establishing the connection, call functions that depend on the database connection
-        await insertUsersAndAttendanceDataToDB(); // Call to insert users and attendance data
-        await readAttendanceDataFromDB(); // Call to load attendance data
     } catch (err) {
         console.error('Error connecting to MongoDB:', err);
         process.exit(1);
