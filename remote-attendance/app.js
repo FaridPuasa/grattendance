@@ -124,14 +124,6 @@ async function readAttendanceDataFromDB() {
                 // Update the attendance record with the location name
                 record.locationName = locationName;
 
-                // Assuming attendanceCollection is your MongoDB collection
-                // Update the MongoDB document with the new location name
-               await attendanceCollection.updateOne(
-                  { "username": username("Hasbul") }, // Replace with your actual document ID
-                  { $set: { "location": locationName } },
-                  { "username": username("Khai") }, // Replace with your actual document ID
-                  { $set: { "location": locationName } }
-               );
             } else {
                 // Handle null or undefined values for latitude or longitude
                 console.log('Latitude or longitude is null or undefined for record:', record);
