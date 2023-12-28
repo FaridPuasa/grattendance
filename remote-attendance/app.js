@@ -228,6 +228,8 @@ app.get('/attendance-log', async (req, res) => {
           }
         }
 
+        console.log('Attendance data with location names:', attendanceData); // Log the attendance data with location names
+
         // Render the attendance log page with the updated attendanceData
         res.render('attendanceLog', { attendanceData });
     } catch (err) {
