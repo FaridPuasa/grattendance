@@ -55,8 +55,8 @@ async function insertUsersAndAttendanceDataToDB() {
         ];
 
         const attendanceData = [
-            { username: 'Hasbul', location: 'Home', signIn: new Date('2023-12-21T10:00:00Z'), signOut: new Date('2023-12-21T17:00:00Z'),  latitude: 1.234567, longitude: 123.456789 },
-            { username: 'Khai', location: 'Home', signIn: new Date('2023-12-21T10:00:00Z'), signOut: new Date('2023-12-21T17:00:00Z'), latitude: 2.345678, longitude: 234.567890 }
+            { username: 'Hasbul', signIn: new Date('2023-12-21T10:00:00Z'), signOut: new Date('2023-12-21T17:00:00Z'),  latitude: 1.234567, longitude: 123.456789 },
+            { username: 'Khai', signIn: new Date('2023-12-21T10:00:00Z'), signOut: new Date('2023-12-21T17:00:00Z'), latitude: 2.345678, longitude: 234.567890 }
 
         ];
 
