@@ -219,11 +219,13 @@ app.get('/attendance-log', async (req, res) => {
             const latitude = record.latitude;
             const longitude = record.longitude;
 
+            if (latitude && longitude) {
             // Fetch location name using getLocationName function
             const locationName = await getLocationName(latitude, longitude);
 
             // Update the attendance record with the location name
             record.locationName = locationName;
+          }
         }
 
         // Render the attendance log page with the updated attendanceData
