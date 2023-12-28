@@ -216,8 +216,8 @@ app.get('/attendance-log', async (req, res) => {
 
         // Fetch location names for each attendance record
         for (const record of attendanceData) {
-            const latitude = record.latitude;
-            const longitude = record.longitude;
+            const latitude = parseFloat (record.latitude);
+            const longitude = parseFloat (record.longitude);
 
             if (latitude && longitude) {
             // Fetch location name using getLocationName function
