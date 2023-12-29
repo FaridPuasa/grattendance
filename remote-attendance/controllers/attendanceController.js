@@ -1,34 +1,31 @@
-const Attendance = require('../models/Attendance');
-const getLocationName = require('./getLocationName'); // Assuming getLocationName is defined in a separate file
+// getLocationName.js
+const axios = require('axios');
 
-// Function to update attendance with location
-const updateLocation = async (latitude, longitude) => {
+// Function to retrieve location name from latitude and longitude
+const getLocationName = async (latitude, longitude) => {
     try {
-        // Fetch the location name using latitude and longitude
-        const locationName = await getLocationName(latitude, longitude);
+        // Check if latitude or longitude is undefined or not numeric
+        if (latitude === undefined || longitude === undefined || isNaN(latitude) || isNaN(longitude)) {
+            console.error('Invalid latitude or longitude:', latitude, longitude);
+            return 'Invalid coordinates';
+        }
 
-        // Update the attendance entry with location details
-        let attendance = await Attendance.findOneAndUpdate(
-            {}, // Your query to find the attendance entry (for illustration purpose, using an empty query to update the first found entry)
-            {
-                $set: {
-                    latitude,
-                    longitude,
-                    location: locationName, // Update with the fetched location name
-                    updatedAt: new Date()
-                }
-            },
-            { upsert: true, new: true }
-        );
+        const apiKey = 'AgkWMZlk5ts6xb8cJkzUar2iJMWTexduafRzsyANqeAF2b_PN0D2CZAKo8hfNqkB'; // Replace with your Bing Maps API key
+        const url = `https://dev.virtualearth.net/REST/v1/Locations/${latitude},${longitude}?key=${apiKey}`;
 
-        // Return the updated attendance entry or handle the result as needed
-        return attendance;
+        const response = await axios.get(url);
+        const data = response.data;
+
+        if (data && data.resourceSets && data.resourceSets.length > 0 && data.resourceSets[0].resources.length > 0) {
+            const location = data.resourceSets[0].resources[0].name;
+            return location;
+        } else {
+            return 'Location not found';
+        }
     } catch (error) {
-        // Handle errors, e.g., database connection error or validation error
-        throw new Error(`Error updating attendance: ${error.message}`);
+        console.error('Error retrieving location:', error);
+        return 'Error fetching location';
     }
 };
 
-module.exports = {
-    updateLocation
-};
+module.exports = getLocationName; // Export the function to be used in other files
