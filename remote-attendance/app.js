@@ -5,6 +5,12 @@ const path = require('path');
 const app = express();
 const axios = require('axios');
 
+process.on('unhandledRejection', (reason, promise) => {
+    console.error('Unhandled Rejection at:', promise, 'reason:', reason);
+    // Handle the error, log, or perform cleanup tasks here
+    process.exit(1); // Optionally exit the process
+});
+
 const mongodbUri = process.env.MONGODB_URI || 'mongodb+srv://itsupport:GSB110011@cluster0.kkzdiku.mongodb.net/LMS?retryWrites=true&w=majority';
 const client = new MongoClient(mongodbUri, { useNewUrlParser: true, useUnifiedTopology: true });
 let db;
@@ -75,8 +81,7 @@ async function insertUsersAndAttendanceDataToDB() {
         ];
 
         const locationPromises = attendanceData.map(async (data) => {
-            const { latitude, longitude } = data;
-            const locationName = await getLocationName(latitude, longitude);
+            const locationName = await getLocationName(data.latitude, data.longitude);
             return { ...data, locationName };
         });
 
@@ -251,7 +256,7 @@ app.get('/attendance-log', async (req, res) => {
           }
         }
 
-        console.log('Attendance data with location names:', attendanceData); // Log the attendance data with location names
+        console.log('Attendance data loaded from MongoDB:', attendanceData); // Log the attendance data with location names
 
         // Render the attendance log page with the updated attendanceData
         res.render('attendanceLog', { attendanceData });
