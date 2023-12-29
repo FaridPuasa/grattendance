@@ -118,6 +118,8 @@ async function readAttendanceDataFromDB() {
             const longitude = parseFloat(record.longitude);
 
             if (!isNaN(latitude) && !isNaN(longitude)) {
+                console.log('Latitude:', latitude);
+                console.log('Longitude:', longitude);
                 // Fetch location name using getLocationName function
                 const locationName = await getLocationName(latitude, longitude);
 
