@@ -459,10 +459,10 @@ app.get('/signout-success', (req, res) => {
 });
 
 // Test getLocationName function with sample latitude and longitude
-const testLatitude = 1.234567; // Replace with actual latitude
-const testLongitude = 123.456789; // Replace with actual longitude
+const latitude = 4.8904877; // Replace with actual latitude
+const longitude = 114.9110915; // Replace with actual longitude
 
-getLocationName(testLatitude, testLongitude)
+getLocationName(latitude, longitude)
   .then(locationName => {
     console.log('Location Name:', locationName);
   })
