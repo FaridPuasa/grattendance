@@ -1,12 +1,23 @@
 const Attendance = require('../models/Attendance');
+const getLocationName = require('./getLocationName'); // Assuming getLocationName is defined in a separate file
 
 // Function to update attendance with location
 const updateLocation = async (latitude, longitude) => {
     try {
-        // Find or create an attendance entry based on your logic
+        // Fetch the location name using latitude and longitude
+        const locationName = await getLocationName(latitude, longitude);
+
+        // Update the attendance entry with location details
         let attendance = await Attendance.findOneAndUpdate(
             {}, // Your query to find the attendance entry (for illustration purpose, using an empty query to update the first found entry)
-            { $set: { latitude, longitude, location: `${latitude},${longitude}`, updatedAt: new Date() } },
+            {
+                $set: {
+                    latitude,
+                    longitude,
+                    location: locationName, // Update with the fetched location name
+                    updatedAt: new Date()
+                }
+            },
             { upsert: true, new: true }
         );
 
